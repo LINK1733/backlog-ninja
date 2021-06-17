@@ -1,0 +1,14 @@
+{
+  "name": "game-tracker",
+  "version": "0.0.1",
+  "description": "Site for making lists of games to play and things to do in them.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alex Kitzberger & Jake Harrington",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
