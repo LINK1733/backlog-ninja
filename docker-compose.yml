@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  app:
+    build:
+      context: .
+      target: dev
+    depends_on:
+      - mongo
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+  mongo:
+    image: mongo:4.4-bionic
+    restart: always
