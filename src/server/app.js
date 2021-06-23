@@ -13,6 +13,8 @@ const User = require('./models/user')
 const MongoStore = require('connect-mongo')
 const userRoutes = require('./routes/users')
 const flash = require('connect-flash');
+const catchAsync = require('./utils/catchAsync');
+const getManifest = require('./utils/getManifest');
 
 const dbUrl = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/game-tracker`
 
@@ -88,13 +90,14 @@ app.use((req, res, next) => {
 
 app.use('/', userRoutes);
 
-app.get('/', (req, res) => {
+app.get('/', catchAsync(async (req, res) => {
+    const manifest = await getManifest();
     if(req.user){
-        res.render('home')
+        res.render('home', {manifest})
     } else {
-        res.render('splash')
+        res.render('splash', {manifest})
     }
-})
+}))
 
 app.listen(port, () => {
     console.log(`Serving on port ${port}`)

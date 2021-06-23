@@ -15,8 +15,8 @@ class Header extends Component {
                         </button>
                         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
                                 <ul className="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
                                     <li className="nav-item"><a className="nav-link link-light" href="/logout">Logout</a></li>
                                 </ul>
