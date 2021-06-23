@@ -9,12 +9,12 @@ const ejsMate = require('ejs-mate')
 const session = require('express-session')
 const passport = require('passport');
 const LocalStrategy = require('passport-local')
-const User = require('../server/models/user')
+const User = require('./models/user')
 const MongoStore = require('connect-mongo')
-const userRoutes = require('../server/routes/users')
+const userRoutes = require('./routes/users')
 const flash = require('connect-flash');
 
-const dbUrl = 'mongodb://localhost:27017/game-tracker'
+const dbUrl = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/game-tracker`
 
 mongoose.connect(dbUrl, {
     useNewUrlParser: true,
