@@ -1,8 +1,11 @@
-const User = require('../models/user')
+const User = require('../models/user'),
+    catchAsync = require('../utils/catchAsync'),
+    getManifest = require('../utils/getManifest');
 
-module.exports.renderRegister = (req, res) => {
-    res.render('users/register')
-}
+module.exports.renderRegister = catchAsync(async (req, res) => {
+    const manifest = await getManifest();
+    res.render('users/register', {manifest})
+});
 
 module.exports.register = async (req, res, next) => {
     try {
@@ -21,9 +24,10 @@ module.exports.register = async (req, res, next) => {
     }
 }
 
-module.exports.renderLogin = (req, res) => {
-    res.render('users/login');
-}
+module.exports.renderLogin = catchAsync(async (req, res) => {
+    const manifest = await getManifest();
+    res.render('users/login', {manifest});
+});
 
 module.exports.login = (req, res) => {
     req.flash('success', 'Logged in successfully')

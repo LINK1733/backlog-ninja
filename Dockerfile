@@ -4,7 +4,7 @@ ENV NODE_ENV=development
 COPY package*.json ./
 RUN npm install
 
-CMD npx nodemon src/server/app.js
+CMD npm start
 
 FROM dev AS prod
 COPY package*.json ./

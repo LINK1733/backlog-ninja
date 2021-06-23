@@ -1,14 +1,16 @@
-const path = require('path');
+const path = require('path'),
+	{WebpackManifestPlugin} = require("webpack-manifest-plugin");
 
 module.exports = {
 	watch: process.argv.includes('development'),
 	entry: {
 		main: './src/static/main.js',
 		splash: './src/static/splash.js'
-	},  
+	},
 	output: {
 		path: path.resolve(__dirname, 'public'),
-		filename: '[name].js'
+		filename: '[name].[contenthash].js',
+		publicPath: ''
 	},
 	module: {
 		rules: [
@@ -23,4 +25,7 @@ module.exports = {
 			}
 		]
 	},
+	plugins: [
+		new WebpackManifestPlugin(),
+	]
 };
