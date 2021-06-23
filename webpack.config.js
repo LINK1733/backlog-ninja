@@ -2,10 +2,13 @@ const path = require('path');
 
 module.exports = {
 	watch: process.argv.includes('development'),
-	entry: './src/static/main.js',
+	entry: {
+		main: './src/static/main.js',
+		splash: './src/static/splash.js'
+	},  
 	output: {
 		path: path.resolve(__dirname, 'public'),
-		filename: 'bundle.js'
+		filename: '[name].js'
 	},
 	module: {
 		rules: [
