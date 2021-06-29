@@ -22,12 +22,12 @@ class Home extends Component {
         )
     }
 }
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+// class App extends React.Component {
+//     constructor(props) {
+//         super(props);
+//     }
+function App() {
     
-    render() {
         return (
             <Router>
                 <div>
@@ -41,9 +41,19 @@ class App extends React.Component {
                 </div>
             </Router>
         );
-    }
+    
 }
 ReactDom.render(
         <App />,
     document.querySelector('#app-root')
 )
+
+
+/* 
+
+parent component (game-list that has games and todos)
+    when you click on the game it will show the todo list for that specific game
+
+use react router instead of express router
+
+*/

@@ -3,7 +3,7 @@ import {
     Link,
 } from "react-router-dom";
 
-class Header extends Component {
+export default class Header extends Component {
     render() {
         return (
             <header>
@@ -19,7 +19,7 @@ class Header extends Component {
                                     Account
                                 </li>
                                 <ul className="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarAccountDropdown">
-                                    <li><a className="dropdown-item nav-link link-light" href="/changePassword">Change Password</a></li>
+                                    <li><a className="dropdown-item nav-link link-light" href="/change-password">Change Password</a></li>
                                     <li><hr className="dropdown-divider"></hr></li>
                                     <li><a className="dropdown-item nav-link link-light" href="/logout">Logout</a></li>
                                 </ul>
@@ -31,5 +31,3 @@ class Header extends Component {
         )   
     }
 }
-
-export default Header;

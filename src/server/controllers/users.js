@@ -60,6 +60,6 @@ module.exports.updatePassword = async (req, res) => {
     catch(e) {
         req.flash('error', 'Something went wrong, check your inputs and try again.')
         console.log(e)
-        res.redirect('changePassword')
+        res.redirect('change-password')
     }
 }
