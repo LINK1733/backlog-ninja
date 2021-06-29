@@ -2,19 +2,22 @@ if(process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
-const express = require('express')
-const path = require('path')
-const mongoose = require('mongoose')
-const ejsMate = require('ejs-mate')
-const session = require('express-session')
-const passport = require('passport');
-const LocalStrategy = require('passport-local')
-const User = require('./models/user')
-const MongoStore = require('connect-mongo')
-const userRoutes = require('./routes/users')
-const flash = require('connect-flash');
-const catchAsync = require('./utils/catchAsync');
-const getManifest = require('./utils/getManifest');
+const express = require('express'),
+    path = require('path'),
+    mongoose = require('mongoose'),
+    ejsMate = require('ejs-mate'),
+    session = require('express-session'),
+    passport = require('passport'),
+    LocalStrategy = require('passport-local'),
+    User = require('./models/user'),
+    MongoStore = require('connect-mongo'),
+    userRoutes = require('./routes/users'),
+    todoRoutes = require('./routes/todos'),
+    flash = require('connect-flash'),
+    catchAsync = require('./utils/catchAsync'),
+    getManifest = require('./utils/getManifest'),
+    serialize = require('serialize-javascript');
+
 
 const dbUrl = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/game-tracker`
 
@@ -89,11 +92,15 @@ app.use((req, res, next) => {
 })
 
 app.use('/', userRoutes);
+app.use('/todos', todoRoutes);
 
 app.get('/', catchAsync(async (req, res) => {
     const manifest = await getManifest();
     if(req.user){
-        res.render('home', {manifest})
+        res.render('home', {
+            user: serialize(req.user),
+            manifest
+        });
     } else {
         res.render('splash', {manifest})
     }

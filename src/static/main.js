@@ -3,10 +3,11 @@ import ReactDom from 'react-dom';
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link,
+    Route
 } from "react-router-dom";
 import Header from './components/header';
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Home extends Component {
     constructor(props) {
@@ -16,7 +17,7 @@ class Home extends Component {
     render() {
         return (
             <main className='container mt-5'>
-                    <h1 className='text-center'>Hello from React</h1>
+                    <h1 className='text-center'>Welcome to Game Tracker</h1>
             </main>
         )
     }
@@ -42,7 +43,6 @@ class App extends React.Component {
         );
     }
 }
-// ms-auto mt-2 btn btn-primary btn-small
 ReactDom.render(
         <App />,
     document.querySelector('#app-root')
