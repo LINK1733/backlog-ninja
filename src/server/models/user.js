@@ -11,7 +11,6 @@ const UserSchema = new Schema({
 });
 
 var options = {
-    interval: 30000,
     limitAttempts: true,
     maxAttempts: 5,
     MissingPasswordError: 'No password was given',
