@@ -3,10 +3,11 @@ import ReactDom from 'react-dom';
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link,
+    Route
 } from "react-router-dom";
 import Header from './components/header';
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Home extends Component {
     constructor(props) {
@@ -16,17 +17,17 @@ class Home extends Component {
     render() {
         return (
             <main className='container mt-5'>
-                    <h1 className='text-center'>Hello from React</h1>
+                    <h1 className='text-center'>Welcome to Game Tracker</h1>
             </main>
         )
     }
 }
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+// class App extends React.Component {
+//     constructor(props) {
+//         super(props);
+//     }
+function App() {
     
-    render() {
         return (
             <Router>
                 <div>
@@ -40,10 +41,19 @@ class App extends React.Component {
                 </div>
             </Router>
         );
-    }
+    
 }
-// ms-auto mt-2 btn btn-primary btn-small
 ReactDom.render(
         <App />,
     document.querySelector('#app-root')
 )
+
+
+/* 
+
+parent component (game-list that has games and todos)
+    when you click on the game it will show the todo list for that specific game
+
+use react router instead of express router
+
+*/
