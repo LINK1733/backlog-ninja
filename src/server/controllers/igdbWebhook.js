@@ -19,7 +19,6 @@ module.exports.getGames = catchAsync(async (req, res) => {
 	let games = [];
 	try {
 		for (i = 0; i < total; i += 500) {
-			await new Promise((resolve) => setTimeout(resolve, 250));
 			const newGames = await igdb(
 				process.env.TWITCH_CLIENT_ID,
 				process.env.TWITCH_APP_ACCESS_TOKEN
