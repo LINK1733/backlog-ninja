@@ -26,9 +26,9 @@ module.exports = {
 		],
 	},
 	plugins: [new WebpackManifestPlugin()],
-	resolve: {
-		fallback: {
-			util: require.resolve('util/'),
-		},
-	},
+	// resolve: {
+	// 	fallback: {
+	// 		util: require.resolve('util/'),
+	// 	},
+	// },
 };

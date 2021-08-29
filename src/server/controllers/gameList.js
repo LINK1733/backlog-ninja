@@ -13,7 +13,11 @@ module.exports.getGameList = catchAsync(async (req, res) => {
 			authorId: req.user.id,
 		},
 		include: {
-			games: true,
+			games: {
+				include: {
+					igdbGame: true,
+				},
+			},
 		},
 	});
 	res.json(gameLists);
@@ -37,18 +41,17 @@ module.exports.searchGame = catchAsync(async (req, res) => {
 
 module.exports.addGameItem = catchAsync(async (req, res, next) => {
 	try {
-		const cover = await prisma.igdbGame.findUnique({
-			where: {
-				id: req.body.gameId,
-			},
-			select: { cover: true },
-		});
+		// const cover = await prisma.igdbGame.findUnique({
+		// 	where: {
+		// 		id: req.body.gameId,
+		// 	},
+		// 	select: { cover: true },
+		// });
 
-		const coverPhoto = cover.cover;
+		// const coverPhoto = cover.cover;
 
 		await prisma.game.create({
 			data: {
-				gameName: req.body.gameName,
 				author: {
 					connect: {
 						id: req.user.id,
@@ -59,7 +62,11 @@ module.exports.addGameItem = catchAsync(async (req, res, next) => {
 						id: req.body.parentList,
 					},
 				},
-				cover: coverPhoto,
+				igdbGame: {
+					connect: {
+						id: req.body.gameId,
+					},
+				},
 				complete: false,
 			},
 		});

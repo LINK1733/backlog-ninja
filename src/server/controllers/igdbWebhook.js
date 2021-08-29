@@ -12,14 +12,17 @@ module.exports.getGames = catchAsync(async (req, res) => {
 		`${process.env.TWITCH_APP_ACCESS_TOKEN}`
 	).request('/games/count');
 
+	async function getGameDB() {}
+
 	const total = totalGames.data.count;
 	let data = [];
 	let games = [];
 	try {
 		for (i = 0; i < total; i += 500) {
+			await new Promise((resolve) => setTimeout(resolve, 250));
 			const newGames = await igdb(
-				`${process.env.TWITCH_CLIENT_ID}`,
-				`${process.env.TWITCH_APP_ACCESS_TOKEN}`
+				process.env.TWITCH_CLIENT_ID,
+				process.env.TWITCH_APP_ACCESS_TOKEN
 			)
 				.fields('name,cover.url,version_parent.name,parent_game.name')
 

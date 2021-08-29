@@ -15,7 +15,8 @@ const express = require('express'),
 
 const gameRoutes = require('./routes/gameList'),
 	userRoutes = require('./routes/users'),
-	igdbWebhookRoutes = require('./routes/igdbWebhook');
+	igdbWebhookRoutes = require('./routes/igdbWebhook'),
+	gameToDoRoutes = require('./routes/gameToDo');
 
 const app = express(),
 	port = 3000;
@@ -61,6 +62,7 @@ app.use((req, res, next) => {
 app.use('/', userRoutes);
 app.use('/games', gameRoutes);
 app.use('/igdbWebhook', igdbWebhookRoutes);
+app.use('/gameToDoLists', gameToDoRoutes);
 
 app.get(
 	'/',
