@@ -21,7 +21,7 @@ export default function Game({ game, deleteGame }) {
 				}
 			>
 				<img className={'float-start'} src={thumbnail} id={game.id} />
-				<span className={'form-check-label px-2 flex-grow-1 my-auto'}>
+				<span className={'form-check-label px-2 flex-grow-1 my-auto '}>
 					{game.igdbGame.name}
 				</span>
 			</button>
@@ -32,7 +32,7 @@ export default function Game({ game, deleteGame }) {
 				id={game.id}
 				onClick={deleteItem}
 			>
-				&times;
+				<span className="sr-only">Delete Game</span>
 			</button>
 		</div>
 	);

@@ -72,7 +72,7 @@ export default function GameList({
 					id={gameList.id}
 					onClick={deleteList}
 				>
-					&times;
+					<span className="sr-only">Delete List</span>
 				</button>
 				<form onSubmit={handleSubmit}>
 					<input
