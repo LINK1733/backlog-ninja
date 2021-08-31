@@ -12,7 +12,7 @@ export default function GameSearch({ gameList, setGameList }) {
 				searchInput: gameForm,
 			};
 			if (gameForm.length === 0) {
-				setSearchResult(0);
+				setSearchResult([]);
 			}
 			if (gameForm.length) {
 				axios
