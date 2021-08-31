@@ -72,6 +72,8 @@ model igdbGame {
   versionParent String?
   parentGame    String?
   gameListGame  Game[]
+
+  @@index([name])
 }
 
 model Session {

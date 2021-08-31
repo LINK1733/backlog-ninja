@@ -41,15 +41,6 @@ module.exports.searchGame = catchAsync(async (req, res) => {
 
 module.exports.addGameItem = catchAsync(async (req, res, next) => {
 	try {
-		// const cover = await prisma.igdbGame.findUnique({
-		// 	where: {
-		// 		id: req.body.gameId,
-		// 	},
-		// 	select: { cover: true },
-		// });
-
-		// const coverPhoto = cover.cover;
-
 		await prisma.game.create({
 			data: {
 				author: {
