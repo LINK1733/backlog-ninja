@@ -62,23 +62,29 @@ export default function GameSearch({ gameList, setGameList }) {
 								key={searchResult.id}
 								className="form-check border-bottom my-2 pb-2 gap-2"
 							>
-								{searchResult.cover && (
-									<img
-										src={searchResult.cover.replace(
-											'thumb',
-											'micro'
-										)}
-										onClick={handleSubmit(searchResult)}
-										id={searchResult.id}
-									/>
-								)}
-								<label
-									onClick={handleSubmit(searchResult)}
-									className="form-check-label flex-grow-1 px-2 my-auto"
-									htmlFor={searchResult.id}
+								<button
+									className={
+										'btn form-check-label px-2 flex-grow-1 my-auto gameLink'
+									}
 								>
-									{searchResult.name}
-								</label>
+									{searchResult.cover && (
+										<img
+											src={searchResult.cover.replace(
+												'thumb',
+												'micro'
+											)}
+											onClick={handleSubmit(searchResult)}
+											id={searchResult.id}
+										/>
+									)}
+									<span
+										onClick={handleSubmit(searchResult)}
+										className="form-check-label flex-grow-1
+										px-2 my-auto"
+									>
+										{searchResult.name}
+									</span>
+								</button>
 							</div>
 						);
 					})}
