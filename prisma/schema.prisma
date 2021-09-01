@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       String     @id @default(cuid())
+  email    String     @unique
+  username String     @unique
+  hash     String
+  games    Game[]
+  lists    GameList[]
+  toDoList ToDoList[]
+  toDoItem ToDoItem[]
+}
+
+model GameList {
+  id       String @id @default(cuid())
+  games    Game[]
+  listName String
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  @@unique([listName, authorId])
+}
+
+model Game {
+  id           String     @id @default(cuid())
+  complete     Boolean
+  author       User       @relation(fields: [authorId], references: [id])
+  authorId     String
+  parentList   GameList   @relation(fields: [parentListId], references: [id])
+  parentListId String
+  igdbGame     igdbGame   @relation(fields: [igdbGameId], references: [id])
+  igdbGameId   Int
+  todoLists    ToDoList[]
+
+  @@unique([igdbGameId, parentListId])
+}
+
+model ToDoList {
+  id           String     @id @default(cuid())
+  author       User       @relation(fields: [authorId], references: [id])
+  authorId     String
+  parentGame   Game       @relation(fields: [parentGameId], references: [id])
+  parentGameId String
+  toDoListName String
+  toDoItems    ToDoItem[]
+
+  @@unique([toDoListName, parentGameId])
+}
+
+model ToDoItem {
+  id               String   @id @default(cuid())
+  parentToDoList   ToDoList @relation(fields: [parentToDoListId], references: [id])
+  parentToDoListId String
+  author           User     @relation(fields: [authorId], references: [id])
+  authorId         String
+  taskText         String
+}
+
+model igdbGame {
+  id            Int     @id @unique
+  name          String
+  cover         String?
+  versionParent String?
+  parentGame    String?
+  gameListGame  Game[]
+
+  @@index([name])
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
