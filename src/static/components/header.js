@@ -37,19 +37,11 @@ class Header extends Component {
 									>
 										Account
 									</a>
-									<ul
-										className="dropdown-menu dropdown-menu-dark"
-										aria-labelledby="navbarDropdown"
-									>
-										<li className="nav-item">
-											<a
-												className="nav-link link-light"
-												href="/logout"
-											>
-												Logout
-											</a>
-										</li>
-									</ul>
+									<ul className="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarAccountDropdown">
+                                    <li><a className="dropdown-item nav-link link-light" href="/change-password">Change Password</a></li>
+                                    <li><hr className="dropdown-divider"></hr></li>
+                                    <li><a className="dropdown-item nav-link link-light" href="/logout">Logout</a></li>
+                                </ul>
 								</li>
 							</ul>
 						</div>

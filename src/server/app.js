@@ -69,7 +69,10 @@ app.get(
 	catchAsync(async (req, res) => {
 		const manifest = await getManifest();
 		if (req.user) {
-			res.render('home', { manifest });
+			res.render('home', {
+				user: serialize(req.user),
+				manifest
+			});
 		} else {
 			res.render('splash', { manifest });
 		}

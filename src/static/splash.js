@@ -1,6 +1,7 @@
-(function () {
-    'use strict'
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
+window.addEventListener('load', () => {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     const forms = document.querySelectorAll('.validated-form')
 
@@ -16,4 +17,4 @@
                 form.classList.add('was-validated')
             }, false)
         })
-})()
+})
