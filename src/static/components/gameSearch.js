@@ -54,7 +54,7 @@ export default function GameSearch({ gameList, setGameList }) {
 				onChange={handleChange}
 				placeholder="New Game"
 			/>
-			{searchResult != 0 && gameForm != '' && (
+			{searchResult.length != 0 && gameForm != '' && (
 				<div id="searchResults" className="shadow border bg-light p-3">
 					{searchResult.map((searchResult) => {
 						return (

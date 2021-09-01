@@ -42,6 +42,7 @@ model Game {
   igdbGameId   Int
   todoLists    ToDoList[]
 
+  @@unique([igdbGameId, parentListId])
 }
 
 model ToDoList {
