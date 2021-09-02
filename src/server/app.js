@@ -11,6 +11,7 @@ const express = require('express'),
 	catchAsync = require('./utils/catchAsync'),
 	getManifest = require('./utils/getManifest'),
 	{ PrismaSessionStore } = require('@quixo3/prisma-session-store'),
+	serialize = require('serialize-javascript'),
 	prisma = require('./db/prisma');
 
 const gameRoutes = require('./routes/gameList'),
@@ -71,7 +72,7 @@ app.get(
 		if (req.user) {
 			res.render('home', {
 				user: serialize(req.user),
-				manifest
+				manifest,
 			});
 		} else {
 			res.render('splash', { manifest });

@@ -35,7 +35,7 @@ export default function GameSearch({ gameList, setGameList }) {
 			.put('/games/addGame', newGame)
 			.then((res) => setGameList(res.data))
 			.then(setSearchResult([]))
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 
 		setGameForm('');
 	};

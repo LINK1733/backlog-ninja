@@ -28,9 +28,12 @@ passport.use(
 passport.serializeUser((user, done) => {
 	done(null, user.id);
 });
-router.route('/change-password')
-    .get(users.renderChange)
-    .post(catchAsync(users.updatePassword))
+
+router
+	.route('/change-password')
+	.get(users.renderChange)
+	.post(catchAsync(users.updatePassword));
+
 passport.deserializeUser(async (userId, done) => {
 	try {
 		const user = await prisma.user.findUnique({

@@ -27,6 +27,7 @@ export default function GameToDoItem({ toDoItem, deleteToDoItem }) {
 				id={toDoItem.id}
 				onClick={deleteToDo}
 			>
+				<span className="visually-hidden">Delete To Do</span>
 				&times;
 			</button>
 		</div>

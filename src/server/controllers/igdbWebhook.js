@@ -48,7 +48,7 @@ module.exports.getGames = catchAsync(async (req, res) => {
 		});
 		console.log('Database complete.');
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		throw e;
 	}
 });
