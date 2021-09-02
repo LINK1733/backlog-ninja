@@ -29,7 +29,7 @@ export default function GameList({
 		axios
 			.put('/gameToDoLists/toDoItem', newToDoItem)
 			.then((res) => setGameToDoLists(res.data))
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 
 		setGameToDoItemForm('');
 	};
@@ -53,6 +53,7 @@ export default function GameList({
 					id={gameToDoList.id}
 					onClick={deleteToDoList}
 				>
+					<span className="visually-hidden">Delete List</span>
 					&times;
 				</button>
 				<form onSubmit={handleSubmit}>

@@ -32,7 +32,8 @@ export default function Game({ game, deleteGame }) {
 				id={game.id}
 				onClick={deleteItem}
 			>
-				<span className="sr-only">Delete Game</span>
+				<span className="visually-hidden">Delete Game</span>
+				&times;
 			</button>
 		</div>
 	);

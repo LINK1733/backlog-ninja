@@ -15,7 +15,7 @@ function App() {
 			.get('/games')
 			.then((res) => setGameList(res.data))
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	};
 

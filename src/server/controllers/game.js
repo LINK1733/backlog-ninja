@@ -14,7 +14,7 @@ module.exports.getToDoList = catchAsync(async (req, res) => {
 		});
 		res.json(toDoLists);
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		next({ status: 400, message: 'failed to fetch to do lists' });
 	}
 });
@@ -29,7 +29,7 @@ module.exports.deleteGame = catchAsync(async (req, res, next) => {
 
 		getGameList(req, res);
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		next({ status: 400, message: 'failed to delete game' });
 	}
 });
@@ -42,7 +42,7 @@ module.exports.showGame = catchAsync(async (req, res) => {
 		});
 		res.json(game);
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		next({ status: 400, message: 'failed to retrieve game' });
 	}
 });

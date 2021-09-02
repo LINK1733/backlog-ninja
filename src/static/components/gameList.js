@@ -30,7 +30,8 @@ export default function GameList({
 					id={gameList.id}
 					onClick={deleteList}
 				>
-					<span className="sr-only">Delete List</span>
+					<span className="visually-hidden">Delete List</span>
+					&times;
 				</button>
 				<GameSearch gameList={gameList} setGameList={setGameList} />
 

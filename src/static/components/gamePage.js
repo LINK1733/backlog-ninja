@@ -22,7 +22,7 @@ export default function GamePage({ game }) {
 		axios
 			.put('/gameToDoLists/', newGameToDoList)
 			.then((res) => setGameToDoLists(res.data))
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 
 		setGameToDoListForm('');
 	};
@@ -36,17 +36,16 @@ export default function GamePage({ game }) {
 			.get('/gameToDoLists')
 			.then((res) => setGameToDoLists(res.data))
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	};
 
 	const fetchGamePage = async () => {
 		await axios
 			.get(`/games/${game}/getGamePage`)
-			// .then((res) => console.log(res.data))
 			.then((res) => setGamePageInfo(res.data))
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	};
 
