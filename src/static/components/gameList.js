@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Game from './game';
 import GameSearch from './gameSearch';
+import RandomGame from './randomGame';
 
 export default function GameList({
 	gameList,
@@ -33,6 +34,7 @@ export default function GameList({
 					<span className="visually-hidden">Delete List</span>
 					&times;
 				</button>
+				<RandomGame games={games} />
 				<GameSearch gameList={gameList} setGameList={setGameList} />
 
 				{games.map((game) => {

@@ -6,6 +6,7 @@ import Home from './components/home';
 import GamePage from './components/gamePage';
 import './Main.scss';
 import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
 	const [gameList, setGameList] = useState([]);
@@ -47,6 +48,18 @@ function App() {
 	return (
 		<Router>
 			<div>
+				<ToastContainer
+					position="top-right"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					theme="dark"
+				/>
 				<Header />
 				<Switch>
 					<Route exact path="/">
