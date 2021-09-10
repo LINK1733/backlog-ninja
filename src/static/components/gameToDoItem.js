@@ -1,15 +1,8 @@
 import React from 'react';
 
 export default function GameToDoItem({ toDoItem, deleteToDoItem }) {
-	// const handleClick = (e) => {
-	// 	handleToggle(e.currentTarget.id);
-	// };
-
 	const deleteToDo = (e) => {
-		const toDoItemToDelete = {
-			toDoItemId: e.currentTarget.id,
-		};
-		deleteToDoItem(toDoItemToDelete);
+		deleteToDoItem(e.currentTarget.id);
 	};
 
 	return (
@@ -18,7 +11,7 @@ export default function GameToDoItem({ toDoItem, deleteToDoItem }) {
 				className={`form-check-label px-2 flex-grow-1 my-auto`}
 				htmlFor={toDoItem.id}
 			>
-				{toDoItem.toDoItemName}
+				{toDoItem.taskText}
 			</label>
 
 			<button

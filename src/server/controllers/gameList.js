@@ -2,9 +2,7 @@ if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
 }
 
-const { ModuleFilenameHelpers } = require('webpack'),
-	catchAsync = require('../utils/catchAsync'),
-	getManifest = require('../utils/getManifest'),
+const catchAsync = require('../utils/catchAsync'),
 	prisma = require('../db/prisma');
 
 module.exports.getGameList = catchAsync(async (req, res) => {
@@ -31,7 +29,7 @@ module.exports.searchGame = catchAsync(async (req, res) => {
 				contains: `${req.body.searchInput}`,
 				mode: 'insensitive',
 			},
-			AND: [{ versionParent: null }, { parentGame: null }],
+			AND: [{ versionParent: null }],
 		},
 		select: { name: true, cover: true, id: true },
 	});
@@ -71,18 +69,9 @@ module.exports.addGameItem = catchAsync(async (req, res, next) => {
 
 module.exports.deleteGameList = catchAsync(async (req, res, next) => {
 	try {
-		const listDelete = prisma.gameList.delete({
+		await prisma.gameList.delete({
 			where: { id: req.body.gameListId },
-			include: {
-				games: true,
-			},
 		});
-
-		const gameDelete = prisma.game.deleteMany({
-			where: { parentListId: req.body.gameListId },
-		});
-
-		await prisma.$transaction([gameDelete, listDelete]);
 
 		module.exports.getGameList(req, res);
 	} catch (e) {

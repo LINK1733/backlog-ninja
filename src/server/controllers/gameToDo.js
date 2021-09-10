@@ -19,7 +19,6 @@ module.exports.newToDoList = catchAsync(async (req, res, next) => {
 				},
 			},
 		});
-
 		getToDoList(req, res);
 	} catch (e) {
 		console.error(e);
@@ -29,18 +28,9 @@ module.exports.newToDoList = catchAsync(async (req, res, next) => {
 
 module.exports.deleteToDoList = catchAsync(async (req, res, next) => {
 	try {
-		const toDoListDelete = prisma.toDoList.delete({
+		await prisma.toDoList.delete({
 			where: { id: req.body.toDoListId },
-			include: {
-				toDoItems: true,
-			},
 		});
-
-		const toDoItemDelete = prisma.toDoItem.deleteMany({
-			where: { parentToDoListId: req.body.toDoListId },
-		});
-
-		await prisma.$transaction([toDoItemDelete, toDoListDelete]);
 
 		getToDoList(req, res);
 	} catch (e) {
