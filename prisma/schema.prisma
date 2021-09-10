@@ -25,7 +25,7 @@ model GameList {
   id       String @id @default(cuid())
   games    Game[]
   listName String
-  author   User   @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
 
   @@unique([listName, authorId])
@@ -34,22 +34,22 @@ model GameList {
 model Game {
   id           String     @id @default(cuid())
   complete     Boolean
-  author       User       @relation(fields: [authorId], references: [id])
+  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId     String
-  parentList   GameList   @relation(fields: [parentListId], references: [id])
+  parentList   GameList   @relation(fields: [parentListId], references: [id], onDelete: Cascade)
   parentListId String
   igdbGame     igdbGame   @relation(fields: [igdbGameId], references: [id])
   igdbGameId   Int
-  todoLists    ToDoList[]
+  toDoLists    ToDoList[]
 
   @@unique([igdbGameId, parentListId])
 }
 
 model ToDoList {
   id           String     @id @default(cuid())
-  author       User       @relation(fields: [authorId], references: [id])
+  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId     String
-  parentGame   Game       @relation(fields: [parentGameId], references: [id])
+  parentGame   Game       @relation(fields: [parentGameId], references: [id], onDelete: Cascade)
   parentGameId String
   toDoListName String
   toDoItems    ToDoItem[]
@@ -59,9 +59,9 @@ model ToDoList {
 
 model ToDoItem {
   id               String   @id @default(cuid())
-  parentToDoList   ToDoList @relation(fields: [parentToDoListId], references: [id])
+  parentToDoList   ToDoList @relation(fields: [parentToDoListId], references: [id], onDelete: Cascade)
   parentToDoListId String
-  author           User     @relation(fields: [authorId], references: [id])
+  author           User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId         String
   taskText         String
 }

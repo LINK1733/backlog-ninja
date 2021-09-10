@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import GameToDoItem from './gameToDoItem';
 
-export default function GameList({
+export default function GameToDoList({
 	gameToDoList,
 	setGameToDoLists,
 	deleteToDoItem,
 	deleteGameToDoList,
 	parentGame,
-	// handleToggle,
 }) {
 	const [gameToDoItemForm, setGameToDoItemForm] = useState([]);
 
@@ -23,8 +22,8 @@ export default function GameList({
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const newToDoItem = {
-			toDoItem: gameToDoItemForm,
-			parentList: gameToDoList.id,
+			toDoItemText: gameToDoItemForm,
+			parentToDoList: gameToDoList.id,
 		};
 		axios
 			.put('/gameToDoLists/toDoItem', newToDoItem)
@@ -39,7 +38,7 @@ export default function GameList({
 			toDoListId: e.currentTarget.id,
 			parentGameId: parentGame,
 		};
-		console.log(e.currentTarget.id);
+
 		deleteGameToDoList(toDoListToDelete);
 	};
 
@@ -73,7 +72,6 @@ export default function GameList({
 						<GameToDoItem
 							toDoItem={toDoItem}
 							key={toDoItem.id}
-							// handleToggle={handleToggle}
 							deleteToDoItem={deleteToDoItem}
 						/>
 					);

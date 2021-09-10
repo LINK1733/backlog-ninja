@@ -22,7 +22,7 @@ export default function GameListKeeper({
 		axios
 			.put('/games/', newGameList)
 			.then((res) => setGameList(res.data))
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 
 		setGameListForm('');
 	};

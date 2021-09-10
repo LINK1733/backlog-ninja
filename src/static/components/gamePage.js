@@ -33,7 +33,9 @@ export default function GamePage({ game }) {
 
 	const fetchGameToDoLists = () => {
 		axios
-			.get('/gameToDoLists')
+			.get('/gameToDoLists', {
+				params: { parentGameId: game },
+			})
 			.then((res) => setGameToDoLists(res.data))
 			.catch((err) => {
 				console.error(err);
@@ -52,14 +54,13 @@ export default function GamePage({ game }) {
 	useEffect(() => {
 		fetchGamePage(setGamePageInfo);
 		fetchGameToDoLists(setGameToDoLists);
-		console.log(gamePageInfo);
 	}, []);
 
 	const deleteGameToDoList = (gameToDoListToDelete) => {
 		axios
 			.delete('/gameToDoLists', {
 				data: {
-					toDoListId: gameToDoListToDelete.gameToDoListId,
+					toDoListId: gameToDoListToDelete.toDoListId,
 				},
 			})
 			.then((res) => setGameToDoLists(res.data));
@@ -69,7 +70,7 @@ export default function GamePage({ game }) {
 		axios
 			.delete('/gameToDoLists/toDoItem', {
 				data: {
-					toDoItemId: toDoItemToDelete.game,
+					toDoItemId: toDoItemToDelete,
 				},
 			})
 			.then((res) => setGameToDoLists(res.data));
@@ -77,7 +78,6 @@ export default function GamePage({ game }) {
 
 	if (gamePageInfo.igdbGame) {
 		igdbGame = gamePageInfo.igdbGame;
-		console.log(igdbGame.name);
 		cover = igdbGame.cover.replace('thumb', 'cover_big');
 	}
 
@@ -109,7 +109,6 @@ export default function GamePage({ game }) {
 							gameToDoList={gameToDoList}
 							setGameToDoLists={setGameToDoLists}
 							key={gameToDoList.id}
-							// handleToggle={handleToggle}
 							deleteToDoItem={deleteToDoItem}
 							deleteGameToDoList={deleteGameToDoList}
 							parentGame={game}
