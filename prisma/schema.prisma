@@ -10,6 +10,14 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Progress {
+  PlanToPlay
+  Dropped
+  Completed
+  Playing
+  Hold
+}
+
 model User {
   id       String     @id @default(cuid())
   email    String     @unique
@@ -41,6 +49,7 @@ model Game {
   igdbGame     igdbGame   @relation(fields: [igdbGameId], references: [id])
   igdbGameId   Int
   toDoLists    ToDoList[]
+  playStatus   Progress   @default(PlanToPlay)
 
   @@unique([igdbGameId, parentListId])
 }

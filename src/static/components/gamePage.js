@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import GameToDoList from './gameToDoList';
+import GamePlayStatus from './gamePlayStatus';
 
 export default function GamePage({ game }) {
 	const [gameToDoLists, setGameToDoLists] = useState([]);
@@ -11,6 +12,18 @@ export default function GamePage({ game }) {
 
 	const handleChange = (e) => {
 		setGameToDoListForm(e.currentTarget.value);
+	};
+
+	const changePlayStatus = (e) => {
+		const newPlayStatus = {
+			newPlayStatus: e.currentTarget.id,
+			game: game,
+		};
+
+		axios
+			.put('/gameToDoLists/updatePlayStatus/', newPlayStatus)
+			.then((res) => setGamePageInfo(res.data))
+			.catch((err) => console.error(err));
 	};
 
 	const handleSubmit = (e) => {
@@ -85,6 +98,10 @@ export default function GamePage({ game }) {
 		<div className="mt-5 container align-items-center">
 			<img src={cover} id={igdbGame.id} />
 			<h1 className="d-inline p-5">{igdbGame.name}</h1>
+			<GamePlayStatus
+				playStatus={gamePageInfo.playStatus}
+				changePlayStatus={changePlayStatus}
+			/>
 			<br />
 
 			<form

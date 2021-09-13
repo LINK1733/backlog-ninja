@@ -14,4 +14,6 @@ router
 	.put(gameToDo.newToDoItem)
 	.delete(gameToDo.deleteToDoItem);
 
+router.route('/updatePlayStatus').put(game.updatePlayStatus);
+
 module.exports = router;
