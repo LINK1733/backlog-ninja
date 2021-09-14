@@ -14,9 +14,9 @@ export default function GamePage({ game }) {
 		setGameToDoListForm(e.currentTarget.value);
 	};
 
-	const changePlayStatus = (e) => {
+	const changePlayStatus = (playStatus) => {
 		const newPlayStatus = {
-			newPlayStatus: e.currentTarget.id,
+			newPlayStatus: playStatus,
 			game: game,
 		};
 
@@ -101,6 +101,7 @@ export default function GamePage({ game }) {
 			<GamePlayStatus
 				playStatus={gamePageInfo.playStatus}
 				changePlayStatus={changePlayStatus}
+				key={gamePageInfo.id}
 			/>
 			<br />
 

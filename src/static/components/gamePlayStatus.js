@@ -1,52 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 export default function GamePlayStatus({ playStatus, changePlayStatus }) {
-	const [currentPlayStatus, setCurrentPlayStatus] = useState([]);
+	const statuses = [
+		{
+			id: 'PlanToPlay',
+			text: 'Plan to Play',
+		},
+		{
+			id: 'Playing',
+			text: 'Playing',
+		},
+		{
+			id: 'Dropped',
+			text: 'Dropped',
+		},
+		{
+			id: 'Completed',
+			text: 'Completed',
+		},
+		{
+			id: 'Hold',
+			text: 'On Hold',
+		},
+	];
 
-	let elements = {
-		plan: document.getElementById('planToPlay'),
-		drop: document.getElementById('dropped'),
-		complete: document.getElementById('completed'),
-		hold: document.getElementById('onHold'),
-		playing: document.getElementById('currentlyPlaying'),
-	};
-
-	const displayAll = () => {
-		elements.plan.style.display = 'flex';
-		elements.drop.style.display = 'flex';
-		elements.complete.style.display = 'flex';
-		elements.hold.style.display = 'flex';
-		elements.playing.style.display = 'flex';
-	};
-
-	useEffect(() => {
-		if (playStatus == 'PlanToPlay') {
-			setCurrentPlayStatus('Planning to Play');
-
-			displayAll();
-			elements.plan.style.display = 'none';
-		} else if (playStatus == 'Dropped') {
-			setCurrentPlayStatus('Dropped');
-
-			displayAll();
-			elements.drop.style.display = 'none';
-		} else if (playStatus == 'Completed') {
-			setCurrentPlayStatus('Completed');
-
-			displayAll();
-			elements.complete.style.display = 'none';
-		} else if (playStatus == 'Playing') {
-			setCurrentPlayStatus('Playing');
-
-			displayAll();
-			elements.playing.style.display = 'none';
-		} else if (playStatus == 'Hold') {
-			setCurrentPlayStatus('On Hold');
-
-			displayAll();
-			elements.hold.style.display = 'none';
-		}
-	}, [playStatus]);
+	const filteredStatus = statuses.filter((status) => status.id == playStatus);
+	const currentStatus = filteredStatus.map((filtered) => filtered.text);
 
 	return (
 		<div className="dropdown">
@@ -57,44 +36,28 @@ export default function GamePlayStatus({ playStatus, changePlayStatus }) {
 				data-bs-toggle="dropdown"
 				aria-expanded="false"
 			>
-				{currentPlayStatus}
+				{currentStatus}
 			</button>
-			<ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-				<li
-					className="dropdown-item"
-					id="currentlyPlaying"
-					onClick={changePlayStatus}
-				>
-					Currently Playing
-				</li>
-				<li
-					className="dropdown-item"
-					id="onHold"
-					onClick={changePlayStatus}
-				>
-					On Hold
-				</li>
-				<li
-					className="dropdown-item"
-					id="dropped"
-					onClick={changePlayStatus}
-				>
-					Dropped
-				</li>
-				<li
-					className="dropdown-item"
-					id="completed"
-					onClick={changePlayStatus}
-				>
-					Completed
-				</li>
-				<li
-					className="dropdown-item"
-					id="planToPlay"
-					onClick={changePlayStatus}
-				>
-					Planning to Play
-				</li>
+			<ul
+				className="dropdown-menu dropdown-menu-dark"
+				aria-labelledby="dropdownMenuButton1"
+			>
+				{statuses
+					.filter((status) => status.id !== playStatus)
+					.map((status) => {
+						return (
+							<li className="d-grid py-1">
+								<button
+									className="btn btn-link col-12 dropdownLink"
+									onClick={() => {
+										changePlayStatus(status.id);
+									}}
+								>
+									{status.text}
+								</button>
+							</li>
+						);
+					})}
 			</ul>
 		</div>
 	);

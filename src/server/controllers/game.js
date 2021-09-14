@@ -50,23 +50,10 @@ module.exports.showGame = catchAsync(async (req, res, next) => {
 
 module.exports.updatePlayStatus = catchAsync(async (req, res, next) => {
 	try {
-		let newPlayStatus = '';
-
-		if (req.body.newPlayStatus == 'planToPlay') {
-			newPlayStatus = 'PlanToPlay';
-		} else if (req.body.newPlayStatus == 'dropped') {
-			newPlayStatus = 'Dropped';
-		} else if (req.body.newPlayStatus == 'completed') {
-			newPlayStatus = 'Completed';
-		} else if (req.body.newPlayStatus == 'onHold') {
-			newPlayStatus = 'Hold';
-		} else if (req.body.newPlayStatus == 'currentlyPlaying') {
-			newPlayStatus = 'Playing';
-		}
 		const game = await prisma.game.update({
 			where: { id: req.body.game },
 			data: {
-				playStatus: newPlayStatus,
+				playStatus: req.body.newPlayStatus,
 			},
 			include: {
 				igdbGame: true,
