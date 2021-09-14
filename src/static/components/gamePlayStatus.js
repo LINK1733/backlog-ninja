@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/GamePlayStatus.scss';
 
 export default function GamePlayStatus({ playStatus, changePlayStatus }) {
 	const statuses = [

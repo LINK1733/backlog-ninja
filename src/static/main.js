@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Header from './components/header';
 import Home from './components/home';
 import GamePage from './components/gamePage';
-import './Main.scss';
 import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 

@@ -15,11 +15,7 @@ export default function Game({ game, deleteGame }) {
 
 	return (
 		<div className="form-check border-bottom my-2 pb-2 d-flex gap-2">
-			<button
-				className={
-					'btn form-check-label px-2 flex-grow-1 my-auto gameLink'
-				}
-			>
+			<button className={'btn form-check-label px-2 flex-grow-1 my-auto'}>
 				<img className={'float-start'} src={thumbnail} id={game.id} />
 				<span className={'form-check-label px-2 flex-grow-1 my-auto '}>
 					{game.igdbGame.name}

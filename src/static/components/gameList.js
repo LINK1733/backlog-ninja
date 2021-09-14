@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Game from './game';
 import GameSearch from './gameSearch';
 import RandomGame from './randomGame';
+import '../styles/gameList.scss';
 
 export default function GameList({
 	gameList,
