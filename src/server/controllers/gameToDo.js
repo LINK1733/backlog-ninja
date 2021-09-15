@@ -14,7 +14,7 @@ module.exports.newToDoList = catchAsync(async (req, res, next) => {
 				},
 				parentGame: {
 					connect: {
-						id: req.body.parentGame,
+						id: req.body.parentGameId,
 					},
 				},
 			},

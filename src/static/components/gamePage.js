@@ -30,7 +30,7 @@ export default function GamePage({ game }) {
 		e.preventDefault();
 		const newGameToDoList = {
 			toDoListName: gameToDoListForm,
-			parentGame: game,
+			parentGameId: game,
 		};
 		axios
 			.put('/gameToDoLists/', newGameToDoList)
@@ -74,6 +74,7 @@ export default function GamePage({ game }) {
 			.delete('/gameToDoLists', {
 				data: {
 					toDoListId: gameToDoListToDelete.toDoListId,
+					parentGameId: gameToDoListToDelete.parentGameId,
 				},
 			})
 			.then((res) => setGameToDoLists(res.data));
@@ -101,7 +102,6 @@ export default function GamePage({ game }) {
 			<GamePlayStatus
 				playStatus={gamePageInfo.playStatus}
 				changePlayStatus={changePlayStatus}
-				key={gamePageInfo.id}
 			/>
 			<br />
 

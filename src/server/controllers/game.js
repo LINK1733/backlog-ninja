@@ -7,7 +7,9 @@ module.exports.getToDoList = catchAsync(async (req, res, next) => {
 		const toDoLists = await prisma.toDoList.findMany({
 			where: {
 				authorId: req.user.id,
-				parentGameId: req.query.parentGameId,
+				parentGameId: req.query.parentGameId
+					? req.query.parentGameId
+					: req.body.parentGameId,
 			},
 			include: {
 				toDoItems: true,

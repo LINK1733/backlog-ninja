@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styles/GamePlayStatus.scss';
 
 export default function GamePlayStatus({ playStatus, changePlayStatus }) {
 	const statuses = [
@@ -25,8 +24,9 @@ export default function GamePlayStatus({ playStatus, changePlayStatus }) {
 		},
 	];
 
-	const filteredStatus = statuses.filter((status) => status.id == playStatus);
-	const currentStatus = filteredStatus.map((filtered) => filtered.text);
+	const currentStatus = statuses.find(
+		(status) => status.id === playStatus
+	)?.text;
 
 	return (
 		<div className="dropdown">
@@ -47,9 +47,9 @@ export default function GamePlayStatus({ playStatus, changePlayStatus }) {
 					.filter((status) => status.id !== playStatus)
 					.map((status) => {
 						return (
-							<li className="d-grid py-1">
+							<li className="" key={status.id}>
 								<button
-									className="btn btn-link col-12 dropdownLink"
+									className="dropdown-item text-center"
 									onClick={() => {
 										changePlayStatus(status.id);
 									}}
