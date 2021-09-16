@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../styles/gameSearch.scss';
 
 export default function GameSearch({ gameList, setGameList }) {
 	const [gameForm, setGameForm] = useState([]);
@@ -64,7 +65,7 @@ export default function GameSearch({ gameList, setGameList }) {
 							>
 								<button
 									className={
-										'btn form-check-label px-2 flex-grow-1 my-auto gameLink'
+										'btn form-check-label px-2 flex-grow-1 my-auto'
 									}
 								>
 									{searchResult.cover && (
