@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "igdbGame" ALTER COLUMN "gameModeId" DROP NOT NULL,
+ALTER COLUMN "genreId" DROP NOT NULL,
+ALTER COLUMN "playerPerspectiveId" DROP NOT NULL,
+ALTER COLUMN "themeId" DROP NOT NULL;

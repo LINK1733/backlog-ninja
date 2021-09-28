@@ -25,12 +25,17 @@ module.exports.searchGame = catchAsync(async (req, res) => {
 	const searchResult = await prisma.igdbGame.findMany({
 		take: 10,
 		where: {
-			name: {
-				contains: `${req.body.searchInput}`,
-				mode: 'insensitive',
+			gameName: {
+				some: {
+					name: {
+						search: req.body.searchInput.split(' ').join(' & '),
+					},
+				},
 			},
+
 			AND: [{ versionParent: null }],
 		},
+
 		select: { name: true, cover: true, id: true },
 	});
 

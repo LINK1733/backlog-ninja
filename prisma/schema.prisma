@@ -1,21 +1,11 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
-}
-
-enum Progress {
-  PlanToPlay
-  Dropped
-  Completed
-  Playing
-  Hold
 }
 
 model User {
@@ -25,16 +15,16 @@ model User {
   hash     String
   games    Game[]
   lists    GameList[]
-  toDoList ToDoList[]
   toDoItem ToDoItem[]
+  toDoList ToDoList[]
 }
 
 model GameList {
   id       String @id @default(cuid())
-  games    Game[]
   listName String
-  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  games    Game[]
 
   @@unique([listName, authorId])
 }
@@ -42,25 +32,25 @@ model GameList {
 model Game {
   id           String     @id @default(cuid())
   complete     Boolean
-  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId     String
-  parentList   GameList   @relation(fields: [parentListId], references: [id], onDelete: Cascade)
   parentListId String
-  igdbGame     igdbGame   @relation(fields: [igdbGameId], references: [id])
   igdbGameId   Int
-  toDoLists    ToDoList[]
   playStatus   Progress   @default(PlanToPlay)
+  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  igdbGame     igdbGame   @relation(fields: [igdbGameId], references: [id])
+  parentList   GameList   @relation(fields: [parentListId], references: [id], onDelete: Cascade)
+  toDoLists    ToDoList[]
 
   @@unique([igdbGameId, parentListId])
 }
 
 model ToDoList {
   id           String     @id @default(cuid())
-  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId     String
-  parentGame   Game       @relation(fields: [parentGameId], references: [id], onDelete: Cascade)
   parentGameId String
   toDoListName String
+  author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parentGame   Game       @relation(fields: [parentGameId], references: [id], onDelete: Cascade)
   toDoItems    ToDoItem[]
 
   @@unique([toDoListName, parentGameId])
@@ -68,22 +58,98 @@ model ToDoList {
 
 model ToDoItem {
   id               String   @id @default(cuid())
-  parentToDoList   ToDoList @relation(fields: [parentToDoListId], references: [id], onDelete: Cascade)
   parentToDoListId String
-  author           User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId         String
   taskText         String
+  author           User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parentToDoList   ToDoList @relation(fields: [parentToDoListId], references: [id], onDelete: Cascade)
 }
 
 model igdbGame {
-  id            Int     @id @unique
-  name          String
-  cover         String?
-  versionParent String?
-  parentGame    String?
-  gameListGame  Game[]
+  id                Int                           @id @unique
+  name              String
+  cover             String?
+  parentGame        String?
+  versionParent     String?
+  summary           String?
+  gameListGame      Game[]
+  gameName          igdbGameName[]
+  gameMode          igdbGameToGameMode[]
+  genre             igdbGameToGenre[]
+  playerPerspective igdbGameToPlayerPerspective[]
+  theme             igdbGameToTheme[]
 
   @@index([name])
+}
+
+model igdbGameName {
+  id         String   @id @default(cuid())
+  altNameId  Int?     @unique
+  name       String
+  igdbGameId Int
+  igdbGame   igdbGame @relation(fields: [igdbGameId], references: [id])
+
+  @@unique([altNameId, igdbGameId])
+}
+
+model igdbGameToPlayerPerspective {
+  gameId              Int
+  playerPerspectiveId Int
+  game                igdbGame                  @relation(fields: [gameId], references: [id])
+  playerPerspective   igdbGamePlayerPerspective @relation(fields: [playerPerspectiveId], references: [id])
+
+  @@id([gameId, playerPerspectiveId])
+}
+
+model igdbGamePlayerPerspective {
+  id       Int                           @id @unique
+  name     String
+  igdbGame igdbGameToPlayerPerspective[]
+}
+
+model igdbGameToGameMode {
+  gameId     Int
+  gameModeId Int
+  game       igdbGame         @relation(fields: [gameId], references: [id])
+  gameMode   igdbGameGameMode @relation(fields: [gameModeId], references: [id])
+
+  @@id([gameId, gameModeId])
+}
+
+model igdbGameGameMode {
+  id                 Int                  @id @unique
+  name               String
+  igdbGameToGameMode igdbGameToGameMode[]
+}
+
+model igdbGameToTheme {
+  gameId  Int
+  themeId Int
+  game    igdbGame      @relation(fields: [gameId], references: [id])
+  theme   igdbGameTheme @relation(fields: [themeId], references: [id])
+
+  @@id([gameId, themeId])
+}
+
+model igdbGameTheme {
+  id              Int               @id @unique
+  name            String
+  igdbGameToTheme igdbGameToTheme[]
+}
+
+model igdbGameToGenre {
+  gameId  Int
+  genreId Int
+  game    igdbGame      @relation(fields: [gameId], references: [id])
+  genre   igdbGameGenre @relation(fields: [genreId], references: [id])
+
+  @@id([gameId, genreId])
+}
+
+model igdbGameGenre {
+  id              Int               @id @unique
+  name            String
+  igdbGameToGenre igdbGameToGenre[]
 }
 
 model Session {
@@ -91,4 +157,12 @@ model Session {
   sid       String   @unique
   data      String
   expiresAt DateTime
+}
+
+enum Progress {
+  PlanToPlay
+  Dropped
+  Completed
+  Playing
+  Hold
 }
