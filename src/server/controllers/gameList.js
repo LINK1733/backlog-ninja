@@ -28,13 +28,13 @@ module.exports.searchGame = catchAsync(async (req, res) => {
 			name: {
 				search: req.body.searchInput.split(' ').join(' & '),
 			},
-			AND: [{ igdbGame: { versionParent: null } }],
+			igdbGame: { versionParent: null },
 		},
 
 		select: { igdbGame: { select: { name: true, cover: true, id: true } } },
 		distinct: ['igdbGameId'],
 	});
-	res.json(searchResult);
+	res.json(searchResult.map((result) => result.igdbGame));
 });
 
 module.exports.addGameItem = catchAsync(async (req, res, next) => {

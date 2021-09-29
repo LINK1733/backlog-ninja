@@ -60,7 +60,7 @@ export default function GameSearch({ gameList, setGameList }) {
 					{searchResult.map((searchResult) => {
 						return (
 							<div
-								key={searchResult.igdbGame.id}
+								key={searchResult.id}
 								className="form-check border-bottom my-2 pb-2 gap-2"
 							>
 								<button
@@ -68,26 +68,22 @@ export default function GameSearch({ gameList, setGameList }) {
 										'btn form-check-label px-2 flex-grow-1 my-auto'
 									}
 								>
-									{searchResult.igdbGame.cover && (
+									{searchResult.cover && (
 										<img
-											src={searchResult.igdbGame.cover.replace(
+											src={searchResult.cover.replace(
 												'thumb',
 												'micro'
 											)}
-											onClick={handleSubmit(
-												searchResult.igdbGame
-											)}
-											id={searchResult.igdbGame.id}
+											onClick={handleSubmit(searchResult)}
+											id={searchResult.id}
 										/>
 									)}
 									<span
-										onClick={handleSubmit(
-											searchResult.igdbGame
-										)}
+										onClick={handleSubmit(searchResult)}
 										className="form-check-label flex-grow-1
 										px-2 my-auto"
 									>
-										{searchResult.igdbGame.name}
+										{searchResult.name}
 									</span>
 								</button>
 							</div>
