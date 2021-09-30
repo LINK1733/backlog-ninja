@@ -22,19 +22,19 @@ module.exports.getGameList = catchAsync(async (req, res) => {
 });
 
 module.exports.searchGame = catchAsync(async (req, res) => {
-	const searchResult = await prisma.igdbGame.findMany({
+	const searchResult = await prisma.igdbGameName.findMany({
 		take: 10,
 		where: {
 			name: {
-				contains: `${req.body.searchInput}`,
-				mode: 'insensitive',
+				search: req.body.searchInput.split(' ').join(' & '),
 			},
-			AND: [{ versionParent: null }],
+			igdbGame: { versionParent: null },
 		},
-		select: { name: true, cover: true, id: true },
-	});
 
-	res.json(searchResult);
+		select: { igdbGame: { select: { name: true, cover: true, id: true } } },
+		distinct: ['igdbGameId'],
+	});
+	res.json(searchResult.map((result) => result.igdbGame));
 });
 
 module.exports.addGameItem = catchAsync(async (req, res, next) => {
