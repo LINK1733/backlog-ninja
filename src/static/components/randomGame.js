@@ -1,6 +1,9 @@
 import React from 'react';
 import { toast } from 'react-toastify';
+import { Button } from 'react-bootstrap';
+import '../styles/randomGame.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import { Dropdown } from 'react-bootstrap';
 
 export default function RandomGame(games) {
 	const length = games.games.length;
@@ -17,14 +20,8 @@ export default function RandomGame(games) {
 	};
 
 	return (
-		<div>
-			<button
-				type="button"
-				className="btn btn-secondary btn-sm"
-				onClick={getRandomGame}
-			>
-				Don't know what to play?
-			</button>
-		</div>
+		<Dropdown.Item className="randomButton" onClick={getRandomGame}>
+			Don't know what to play?
+		</Dropdown.Item>
 	);
 }

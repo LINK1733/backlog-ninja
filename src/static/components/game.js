@@ -1,4 +1,6 @@
 import React from 'react';
+import '../styles/game.scss';
+import { Button } from 'react-bootstrap';
 
 export default function Game({ game, deleteGame }) {
 	const deleteItem = (e) => {
@@ -14,23 +16,27 @@ export default function Game({ game, deleteGame }) {
 	}
 
 	return (
-		<div className="form-check border-bottom my-2 pb-2 d-flex gap-2">
-			<button className={'btn form-check-label px-2 flex-grow-1 my-auto'}>
-				<img className={'float-start'} src={thumbnail} id={game.id} />
-				<span className={'form-check-label px-2 flex-grow-1 my-auto '}>
+		<div className="border-bottom border-secondary my-2 pb-2 d-flex align-items-center">
+			<Button variant="link" className="gameButton flex-grow-1 my-auto">
+				<img
+					className="float-start rounded"
+					src={thumbnail}
+					id={game.id}
+				/>
+				<span id="gameName" className="flex-grow-1 my-auto ps-1">
 					{game.igdbGame.name}
 				</span>
-			</button>
+			</Button>
 
-			<button
-				type="button"
-				className="btn btn-secondary btn-sm"
+			<Button
+				variant="secondary"
+				size="sm"
 				id={game.id}
 				onClick={deleteItem}
 			>
 				<span className="visually-hidden">Delete Game</span>
 				&times;
-			</button>
+			</Button>
 		</div>
 	);
 }

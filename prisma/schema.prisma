@@ -37,7 +37,7 @@ model Game {
   igdbGameId   Int
   playStatus   Progress   @default(PlanToPlay)
   author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  igdbGame     igdbGame   @relation(fields: [igdbGameId], references: [id])
+  igdbGame     igdbGame   @relation(fields: [igdbGameId], references: [id], onDelete: Cascade)
   parentList   GameList   @relation(fields: [parentListId], references: [id], onDelete: Cascade)
   toDoLists    ToDoList[]
 
@@ -87,7 +87,7 @@ model igdbGameName {
   altNameId  Int?     @unique
   name       String
   igdbGameId Int
-  igdbGame   igdbGame @relation(fields: [igdbGameId], references: [id])
+  igdbGame   igdbGame @relation(fields: [igdbGameId], references: [id], onDelete: Cascade)
 
   @@unique([altNameId, igdbGameId])
 }
@@ -95,7 +95,7 @@ model igdbGameName {
 model igdbGameToPlayerPerspective {
   gameId              Int
   playerPerspectiveId Int
-  game                igdbGame                  @relation(fields: [gameId], references: [id])
+  game                igdbGame                  @relation(fields: [gameId], references: [id], onDelete: Cascade)
   playerPerspective   igdbGamePlayerPerspective @relation(fields: [playerPerspectiveId], references: [id])
 
   @@id([gameId, playerPerspectiveId])
@@ -110,7 +110,7 @@ model igdbGamePlayerPerspective {
 model igdbGameToGameMode {
   gameId     Int
   gameModeId Int
-  game       igdbGame         @relation(fields: [gameId], references: [id])
+  game       igdbGame         @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameMode   igdbGameGameMode @relation(fields: [gameModeId], references: [id])
 
   @@id([gameId, gameModeId])
@@ -125,7 +125,7 @@ model igdbGameGameMode {
 model igdbGameToTheme {
   gameId  Int
   themeId Int
-  game    igdbGame      @relation(fields: [gameId], references: [id])
+  game    igdbGame      @relation(fields: [gameId], references: [id], onDelete: Cascade)
   theme   igdbGameTheme @relation(fields: [themeId], references: [id])
 
   @@id([gameId, themeId])
@@ -140,7 +140,7 @@ model igdbGameTheme {
 model igdbGameToGenre {
   gameId  Int
   genreId Int
-  game    igdbGame      @relation(fields: [gameId], references: [id])
+  game    igdbGame      @relation(fields: [gameId], references: [id], onDelete: Cascade)
   genre   igdbGameGenre @relation(fields: [genreId], references: [id])
 
   @@id([gameId, genreId])

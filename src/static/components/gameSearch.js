@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/gameSearch.scss';
+import { Form, Button } from 'react-bootstrap';
 
 export default function GameSearch({ gameList, setGameList }) {
 	const [gameForm, setGameForm] = useState([]);
@@ -17,7 +18,7 @@ export default function GameSearch({ gameList, setGameList }) {
 			}
 			if (gameForm.length) {
 				axios
-					.put('/games/search', searchInput)
+					.put('/api/games/search', searchInput)
 					.then((res) => setSearchResult(res.data));
 			}
 		}, 500);
@@ -33,7 +34,7 @@ export default function GameSearch({ gameList, setGameList }) {
 			parentList: gameList.id,
 		};
 		axios
-			.put('/games/addGame', newGame)
+			.put('/api/games/addGame', newGame)
 			.then((res) => setGameList(res.data))
 			.then(setSearchResult([]))
 			.catch((err) => console.error(err));
@@ -45,28 +46,26 @@ export default function GameSearch({ gameList, setGameList }) {
 		setGameForm(e.currentTarget.value);
 	};
 	return (
-		<form onSubmit={handleSubmit}>
-			<input
-				value={gameForm}
-				className="w-100 my-1 "
+		<Form onSubmit={handleSubmit} autoComplete="off">
+			<Form.Control
 				type="text"
 				id="new-game-input"
+				className="w-100 my-1 rounded shadow px-2 py-1"
 				name="new-game-input"
 				onChange={handleChange}
 				placeholder="New Game"
 			/>
 			{searchResult.length != 0 && gameForm != '' && (
-				<div id="searchResults" className="shadow border bg-light p-3">
+				<div id="searchResults" className="rounded p-3">
 					{searchResult.map((searchResult) => {
 						return (
 							<div
 								key={searchResult.id}
-								className="form-check border-bottom my-2 pb-2 gap-2"
+								className="form-check border-bottom my-2 pb-2 gap-2 justify-content-start"
 							>
-								<button
-									className={
-										'btn form-check-label px-2 flex-grow-1 my-auto'
-									}
+								<Button
+									variant="link"
+									className="searchResult px-2 flex-grow-1 my-auto"
 								>
 									{searchResult.cover && (
 										<img
@@ -79,18 +78,19 @@ export default function GameSearch({ gameList, setGameList }) {
 										/>
 									)}
 									<span
+										id="searchResultName"
 										onClick={handleSubmit(searchResult)}
 										className="form-check-label flex-grow-1
 										px-2 my-auto"
 									>
 										{searchResult.name}
 									</span>
-								</button>
+								</Button>
 							</div>
 						);
 					})}
 				</div>
 			)}
-		</form>
+		</Form>
 	);
 }

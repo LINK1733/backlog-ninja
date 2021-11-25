@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import GameToDoList from './gameToDoList';
 import GamePlayStatus from './gamePlayStatus';
+import '../styles/gamePage.scss';
+import GameTime from './gameTime';
+import { Col, Container, Image, Row, Form } from 'react-bootstrap';
 
 export default function GamePage({ game }) {
 	const [gameToDoLists, setGameToDoLists] = useState([]);
@@ -21,7 +24,7 @@ export default function GamePage({ game }) {
 		};
 
 		axios
-			.put('/gameToDoLists/updatePlayStatus/', newPlayStatus)
+			.put('/api/gameToDoLists/updatePlayStatus/', newPlayStatus)
 			.then((res) => setGamePageInfo(res.data))
 			.catch((err) => console.error(err));
 	};
@@ -33,7 +36,7 @@ export default function GamePage({ game }) {
 			parentGameId: game,
 		};
 		axios
-			.put('/gameToDoLists/', newGameToDoList)
+			.put('/api/gameToDoLists/', newGameToDoList)
 			.then((res) => setGameToDoLists(res.data))
 			.catch((err) => console.error(err));
 
@@ -42,11 +45,16 @@ export default function GamePage({ game }) {
 
 	let cover = '';
 
-	let igdbGame = [];
+	let igdbGame = [],
+		gameMode = [],
+		genre = [],
+		playerPerspective = [],
+		summary = '',
+		theme = [];
 
 	const fetchGameToDoLists = () => {
 		axios
-			.get('/gameToDoLists', {
+			.get('/api/gameToDoLists', {
 				params: { parentGameId: game },
 			})
 			.then((res) => setGameToDoLists(res.data))
@@ -57,7 +65,7 @@ export default function GamePage({ game }) {
 
 	const fetchGamePage = async () => {
 		await axios
-			.get(`/games/${game}/getGamePage`)
+			.get(`/api/games/${game}/getGamePage`)
 			.then((res) => setGamePageInfo(res.data))
 			.catch((err) => {
 				console.error(err);
@@ -71,7 +79,7 @@ export default function GamePage({ game }) {
 
 	const deleteGameToDoList = (gameToDoListToDelete) => {
 		axios
-			.delete('/gameToDoLists', {
+			.delete('/api/gameToDoLists', {
 				data: {
 					toDoListId: gameToDoListToDelete.toDoListId,
 					parentGameId: gameToDoListToDelete.parentGameId,
@@ -82,9 +90,10 @@ export default function GamePage({ game }) {
 
 	const deleteToDoItem = (toDoItemToDelete) => {
 		axios
-			.delete('/gameToDoLists/toDoItem', {
+			.delete('/api/gameToDoLists/toDoItem', {
 				data: {
-					toDoItemId: toDoItemToDelete,
+					toDoItemId: toDoItemToDelete.toDoItemId,
+					parentGameId: toDoItemToDelete.parentGameId,
 				},
 			})
 			.then((res) => setGameToDoLists(res.data));
@@ -92,35 +101,114 @@ export default function GamePage({ game }) {
 
 	if (gamePageInfo.igdbGame) {
 		igdbGame = gamePageInfo.igdbGame;
+		gameMode = gamePageInfo.igdbGame.gameMode;
+		genre = gamePageInfo.igdbGame.genre;
+		playerPerspective = gamePageInfo.igdbGame.playerPerspective;
+		theme = gamePageInfo.igdbGame.theme;
+		summary = gamePageInfo.igdbGame.summary;
+
 		cover = igdbGame.cover.replace('thumb', 'cover_big');
 	}
 
 	return (
-		<div className="mt-5 container align-items-center">
-			<img src={cover} id={igdbGame.id} />
-			<h1 className="d-inline p-5">{igdbGame.name}</h1>
-			<GamePlayStatus
-				playStatus={gamePageInfo.playStatus}
-				changePlayStatus={changePlayStatus}
-			/>
-			<br />
+		<Container fluid className="p-5">
+			<div className="justify-content-center">
+				<Row>
+					<Col lg="2">
+						<Image
+							src={cover}
+							id={igdbGame.id}
+							rounded
+							className="w-100"
+						/>
+					</Col>
+					<Col lg="7">
+						<div className="flex-grow-1 ">
+							<Row>
+								<Col>
+									<h1 id="gamePageName">{igdbGame.name}</h1>
+								</Col>
+								<Col sm="auto">
+									<GamePlayStatus
+										playStatus={gamePageInfo.playStatus}
+										changePlayStatus={changePlayStatus}
+									/>
+								</Col>
+							</Row>
+							{playerPerspective &&
+								playerPerspective.map((playerPerspective) => {
+									return (
+										<h5
+											className="badge rounded-pill tagPill me-1"
+											key={
+												playerPerspective
+													.playerPerspective.id
+											}
+										>
+											{
+												playerPerspective
+													.playerPerspective.name
+											}
+										</h5>
+									);
+								})}
+							{gameMode &&
+								gameMode.map((gameMode) => {
+									return (
+										<h5
+											className="badge rounded-pill tagPill me-1"
+											key={gameMode.gameMode.id}
+										>
+											{gameMode.gameMode.name}
+										</h5>
+									);
+								})}
+							{genre &&
+								genre.map((genre) => {
+									return (
+										<h5
+											className="badge rounded-pill tagPill me-1"
+											key={genre.genre.id}
+										>
+											{genre.genre.name}
+										</h5>
+									);
+								})}
 
-			<form
+							{theme &&
+								theme.map((theme) => {
+									return (
+										<h5
+											className="badge rounded-pill tagPill me-1"
+											key={theme.theme.id}
+										>
+											{theme.theme.name}
+										</h5>
+									);
+								})}
+							<p id="gameSummary">{summary}</p>
+						</div>
+					</Col>
+					<Col>
+						<GameTime gameTimes={gamePageInfo.hltbTime} />
+					</Col>
+				</Row>
+			</div>
+			<br />
+			<Form
 				onSubmit={handleSubmit}
 				className="container align-items-center"
 			>
-				<input
+				<Form.Control
 					value={gameToDoListForm}
-					className=" w-100 my-1 mx-auto"
 					type="text"
-					id="new-game-to-do-list-input"
-					name="new-game-to-do-list-input"
+					className="w-100 my-1 mx-auto rounded shadow px-2 py-1"
+					id="new-gameToDoList-input"
 					onChange={handleChange}
 					placeholder="Enter new to do list, press Enter to save."
 				/>
-			</form>
-
-			<div className="row gy-3 flex-wrap p-3 m-0">
+			</Form>
+			<Row className="gy-3 pb-3 m-0 justify-content-center">
 				{gameToDoLists.map((gameToDoList) => {
 					return (
 						<GameToDoList
@@ -133,7 +221,7 @@ export default function GamePage({ game }) {
 						/>
 					);
 				})}
-			</div>
-		</div>
+			</Row>
+		</Container>
 	);
 }

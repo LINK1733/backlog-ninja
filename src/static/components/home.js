@@ -8,7 +8,7 @@ export default function Home({
 	deleteGameList,
 }) {
 	return (
-		<div className="mt-5">
+		<div className="pt-5">
 			<GameListKeeper
 				allGameLists={gameList}
 				setGameList={setGameList}
