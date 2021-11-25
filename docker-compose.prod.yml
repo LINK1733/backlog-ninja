@@ -1,8 +1,10 @@
 version: '3.7'
 services:
-  app:
-    build:
-      target: prod
-    restart: always
-  mongo:
-    restart: always
+    app:
+        build:
+            target: prod
+        restart: always
+    postgres:
+        restart: always
+    redis:
+        restart: always

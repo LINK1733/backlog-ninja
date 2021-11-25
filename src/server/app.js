@@ -1,6 +1,6 @@
-if (process.env.NODE_ENV !== 'production') {
-	require('dotenv').config();
-}
+const dotenvExpand = require('dotenv-expand'),
+	dotenv = require('dotenv');
+dotenvExpand(dotenv.config());
 
 const express = require('express'),
 	path = require('path'),
@@ -10,9 +10,9 @@ const express = require('express'),
 	flash = require('connect-flash'),
 	catchAsync = require('./utils/catchAsync'),
 	getManifest = require('./utils/getManifest'),
-	{ PrismaSessionStore } = require('@quixo3/prisma-session-store'),
 	serialize = require('serialize-javascript'),
-	prisma = require('./db/prisma');
+	redis = require('redis'),
+	connectRedis = require('connect-redis');
 
 const gameRoutes = require('./routes/gameList'),
 	userRoutes = require('./routes/users'),
@@ -21,6 +21,8 @@ const gameRoutes = require('./routes/gameList'),
 
 const app = express(),
 	port = 3000;
+
+const redisClient = redis.createClient({ host: process.env.REDIS_HOST });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('./public'));
@@ -32,6 +34,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 const secret = process.env.SESSION_SECRET;
 
+const RedisStore = connectRedis(expressSession),
+	sessionStore = new RedisStore({ client: redisClient });
+
 app.use(
 	expressSession({
 		cookie: {
@@ -40,11 +45,7 @@ app.use(
 		secret: secret,
 		resave: true,
 		saveUninitialized: true,
-		store: new PrismaSessionStore(prisma, {
-			checkPeriod: 2 * 60 * 1000,
-			dbRecordIdIsSessionId: true,
-			dbRecordIdFunction: undefined,
-		}),
+		store: sessionStore,
 	})
 );
 
@@ -61,9 +62,9 @@ app.use((req, res, next) => {
 });
 
 app.use('/', userRoutes);
-app.use('/games', gameRoutes);
-app.use('/igdbWebhook', igdbWebhookRoutes);
-app.use('/gameToDoLists', gameToDoRoutes);
+app.use('/api/games', gameRoutes);
+app.use('/api/igdbWebhook', igdbWebhookRoutes);
+app.use('/api/gameToDoLists', gameToDoRoutes);
 
 app.get(
 	'/',
@@ -76,6 +77,21 @@ app.get(
 			});
 		} else {
 			res.render('splash', { manifest });
+		}
+	})
+);
+
+app.get(
+	'/games/*',
+	catchAsync(async (req, res) => {
+		const manifest = await getManifest();
+		if (req.user) {
+			res.render('home', {
+				user: serialize(req.user),
+				manifest,
+			});
+		} else {
+			res.redirect('/');
 		}
 	})
 );

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import GameToDoItem from './gameToDoItem';
+import '../styles/gameToDoList.scss';
+import { Col, Button, Form } from 'react-bootstrap';
 
 export default function GameToDoList({
 	gameToDoList,
@@ -24,9 +26,10 @@ export default function GameToDoList({
 		const newToDoItem = {
 			toDoItemText: gameToDoItemForm,
 			parentToDoList: gameToDoList.id,
+			parentGameId: gameToDoList.parentGameId,
 		};
 		axios
-			.put('/gameToDoLists/toDoItem', newToDoItem)
+			.put('/api/gameToDoLists/toDoItem', newToDoItem)
 			.then((res) => setGameToDoLists(res.data))
 			.catch((err) => console.error(err));
 
@@ -43,33 +46,34 @@ export default function GameToDoList({
 	};
 
 	return (
-		<div className="col-xs-12 col-sm-6 col-md-4">
-			<div className="p-3 border bg-light">
-				<h3 className="text-center">{toDoListName}</h3>
-				<button
-					type="button"
-					className="btn btn-secondary btn-sm"
+		<Col xs={12} sm={6} md={3} className="rounded gamePageToDoList">
+			<div className="p-3">
+				<h2 className="text-center">{toDoListName}</h2>
+				<Button
+					variant="secondary"
+					size="sm"
 					id={gameToDoList.id}
 					onClick={deleteToDoList}
 				>
 					<span className="visually-hidden">Delete List</span>
 					&times;
-				</button>
-				<form onSubmit={handleSubmit}>
-					<input
+				</Button>
+				<Form onSubmit={handleSubmit}>
+					<Form.Control
 						value={gameToDoItemForm}
-						className="w-100 my-1 "
 						type="text"
-						id="new-game-input"
-						name="new-game-input"
+						className="w-100 my-1 rounded px-2 py-1"
+						id="new-toDoList-input"
+						name="new-toDoList-input"
 						onChange={handleChange}
 						placeholder="New To Do"
 					/>
-				</form>
+				</Form>
 
 				{toDoItems.map((toDoItem) => {
 					return (
 						<GameToDoItem
+							parentGame={parentGame}
 							toDoItem={toDoItem}
 							key={toDoItem.id}
 							deleteToDoItem={deleteToDoItem}
@@ -77,6 +81,6 @@ export default function GameToDoList({
 					);
 				})}
 			</div>
-		</div>
+		</Col>
 	);
 }

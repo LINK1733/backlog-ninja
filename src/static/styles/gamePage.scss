@@ -1,0 +1,29 @@
+#gameSummary {
+	font-size: 12pt;
+	font-family: 'Arial', sans-serif;
+	white-space: pre-wrap;
+	color: #f0f4f8;
+}
+
+#gamePageName {
+	color: #f0f4f8;
+	font-family: 'Arial', sans-serif;
+	font-weight: bold;
+}
+
+#new-gameToDoList-input {
+	background-color: #323f4b;
+	color: #f0f4f8;
+	border-color: transparent;
+	box-shadow: 0 0.5rem 1rem #0a0a0a3a;
+	&:focus {
+		outline: none;
+		border: 1px solid #cc5500;
+	}
+}
+
+.tagPill {
+	background-color: #3e4c59;
+	border: 1px solid #ff7c1f;
+	color: #f0f4f8;
+}

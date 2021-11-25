@@ -87,7 +87,9 @@ module.exports.getGames = catchAsync(async (req, res) => {
 				id: games[i].id,
 				name: games[i].name,
 				summary: games[i].summary,
-				cover: games[i].cover?.url || null,
+				cover:
+					games[i].cover?.url ||
+					'//images.igdb.com/igdb/image/upload/t_thumb/nocover.png',
 				versionParent: games[i].version_parent?.name || null,
 				parentGame: games[i].parent_game?.name || null,
 			};
@@ -166,4 +168,144 @@ module.exports.getGames = catchAsync(async (req, res) => {
 		console.error(e);
 		throw e;
 	}
+});
+
+module.exports.createRequest = catchAsync(async (req, res) => {
+	const games = req.body;
+	data = {
+		id: games.id,
+		name: games.name,
+		summary: games.summary,
+		cover: '//images.igdb.com/igdb/image/upload/t_thumb/nocover.png',
+		versionParent: games.version_parent?.name || null,
+		parentGame: games.parent_game?.name || null,
+	};
+	if (games.cover) {
+		const coverUrl = await igdb(
+			process.env.TWITCH_CLIENT_ID,
+			process.env.TWITCH_APP_ACCESS_TOKEN
+		)
+			.fields('url')
+			.where(`id = ${games.cover}`)
+
+			.request('/covers');
+
+		data.cover = coverUrl.data[0].url;
+	}
+	if (games.player_perspectives) {
+		data.playerPerspective = {
+			create: games.player_perspectives.map((playerPerspectiveId) => {
+				return {
+					playerPerspectiveId,
+				};
+			}),
+		};
+	}
+
+	if (games.themes) {
+		data.theme = {
+			create: games.themes.map((themeId) => {
+				return {
+					themeId,
+				};
+			}),
+		};
+	}
+
+	if (games.genres) {
+		data.genre = {
+			create: games.genres.map((genreId) => {
+				return {
+					genreId,
+				};
+			}),
+		};
+	}
+	if (games.alternative_names) {
+		const gameNameArray = await Promise.all(
+			games.alternative_names.map(async (altNameId) => {
+				const altName = await igdb(
+					process.env.TWITCH_CLIENT_ID,
+					process.env.TWITCH_APP_ACCESS_TOKEN
+				)
+					.fields('name')
+					.where(`id = ${altNameId}`)
+
+					.request('/alternative_names');
+
+				const name = altName.data;
+				return {
+					altNameId,
+					name: name[0].name,
+				};
+			})
+		);
+
+		gameNameArray.push({ name: games.name });
+		data.gameName = {
+			create: gameNameArray,
+		};
+	}
+
+	if (games.alternative_names == undefined) {
+		data.gameName = { create: { name: games.name } };
+	}
+
+	if (games.game_modes) {
+		data.gameMode = {
+			create: games.game_modes.map((gameModeId) => {
+				return {
+					gameModeId,
+				};
+			}),
+		};
+	}
+	await prisma.igdbGame.create({
+		data,
+	});
+
+	res.send(console.log('game create complete'));
+});
+
+module.exports.deleteRequest = catchAsync(async (req, res) => {
+	const deleteData = req.body;
+
+	await prisma.igdbGame.delete({
+		where: { id: deleteData.id },
+	});
+
+	res.send('deletion complete');
+});
+
+module.exports.updateRequest = catchAsync(async (req, res) => {
+	const updateData = req.body;
+
+	if (updateData.cover) {
+		const coverUrl = await igdb(
+			process.env.TWITCH_CLIENT_ID,
+			process.env.TWITCH_APP_ACCESS_TOKEN
+		)
+			.fields('url')
+			.where(`id = ${updateData.cover}`)
+
+			.request('/covers');
+		updateData.cover = coverUrl.data[0];
+	}
+
+	await prisma.igdbGame.update({
+		where: {
+			id: updateData.id,
+		},
+		data: {
+			id: updateData.id,
+			name: updateData.name,
+			summary: updateData.summary,
+			cover:
+				updateData.cover?.url ||
+				'//images.igdb.com/igdb/image/upload/t_thumb/nocover.png',
+			versionParent: updateData.version_parent?.name || null,
+			parentGame: updateData.parent_game?.name || null,
+		},
+	});
+	res.send(console.log('game update complete'));
 });

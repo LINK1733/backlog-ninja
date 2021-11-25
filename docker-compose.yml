@@ -1,14 +1,40 @@
 version: '3.7'
 services:
-  app:
-    build:
-      context: .
-      target: dev
-    depends_on:
-      - mongo
-    ports:
-      - 3000:3000
-    restart: unless-stopped
-  mongo:
-    image: mongo:4.4-bionic
-    restart: always
+    app:
+        build:
+            context: .
+            target: dev
+        depends_on:
+            - postgres
+            - redis
+        ports:
+            - 3000:3000
+        restart: unless-stopped
+
+    postgres:
+        image: postgres:13-alpine
+        environment:
+            POSTGRES_USER: $PGUSER
+            POSTGRES_PASSWORD: $PGPASSWORD
+            POSTGRES_DB: $PGDATABASE
+        volumes:
+            - type: volume
+              source: postgres
+              target: /var/lib/postgresql/data
+              volume:
+                  nocopy: true
+        restart: unless-stopped
+    redis:
+        image: redis:6-alpine
+        command: redis-server --appendonly yes
+        volumes:
+            - type: volume
+              source: redis
+              target: /data
+              volume:
+                  nocopy: true
+        restart: unless-stopped
+
+volumes:
+    postgres:
+    redis:

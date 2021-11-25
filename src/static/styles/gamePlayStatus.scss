@@ -1,0 +1,14 @@
+#dropdownMenuButton1 {
+	background-color: #3e4c59;
+	border: none;
+	color: #f0f4f8;
+	&:hover {
+		background-color: #52606d;
+	}
+	&:focus {
+		background-color: #52606d;
+	}
+	&:active {
+		background-color: #52606d;
+	}
+}

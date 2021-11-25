@@ -4,6 +4,7 @@ import Game from './game';
 import GameSearch from './gameSearch';
 import RandomGame from './randomGame';
 import '../styles/gameList.scss';
+import { Row, Col, Dropdown } from 'react-bootstrap';
 
 export default function GameList({
 	gameList,
@@ -23,19 +24,37 @@ export default function GameList({
 	};
 
 	return (
-		<div className="col-xs-12 col-sm-6 col-md-4">
-			<div className="p-3 border bg-light">
-				<h2 className="text-center">{listName}</h2>
-				<button
-					type="button"
-					className="btn btn-secondary btn-sm"
-					id={gameList.id}
-					onClick={deleteList}
-				>
-					<span className="visually-hidden">Delete List</span>
-					&times;
-				</button>
-				<RandomGame games={games} />
+		<Col xs={12} sm={6} md={3} className="rounded gameList">
+			<div className="p-3 justify-content-center">
+				<Row className="listHeader">
+					<Col>
+						<h2 className="listTitle">{listName}</h2>
+					</Col>
+					<Col xs="auto">
+						<Dropdown>
+							<Dropdown.Toggle className="fas fa-bars dropdownButton" />
+							<Dropdown.Menu
+								variant="dark"
+								className="listDropdown"
+							>
+								<div>
+									<Dropdown.Item
+										id={gameList.id}
+										onClick={deleteList}
+									>
+										Delete List
+										<span className="visually-hidden">
+											Delete List
+										</span>
+									</Dropdown.Item>
+								</div>
+								<Dropdown.Divider />
+								<RandomGame games={games} />
+							</Dropdown.Menu>
+						</Dropdown>
+					</Col>
+				</Row>
+
 				<GameSearch gameList={gameList} setGameList={setGameList} />
 
 				{games.map((game) => {
@@ -54,6 +73,6 @@ export default function GameList({
 					);
 				})}
 			</div>
-		</div>
+		</Col>
 	);
 }

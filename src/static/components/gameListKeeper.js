@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import GameList from './gameList';
+import '../styles/gameListKeeper.scss';
+import { Form, Row } from 'react-bootstrap';
 
 export default function GameListKeeper({
 	allGameLists,
@@ -20,31 +22,29 @@ export default function GameListKeeper({
 			listName: gameListForm,
 		};
 		axios
-			.put('/games/', newGameList)
+			.put('/api/games/', newGameList)
 			.then((res) => setGameList(res.data))
 			.catch((err) => console.error(err));
 
 		setGameListForm('');
+
+		e.currentTarget.value = '';
 	};
 
 	return (
-		<div className="">
-			<form
-				onSubmit={handleSubmit}
-				className="container align-items-center"
-			>
-				<input
-					value={gameListForm}
-					className=" w-100 my-1 mx-auto"
-					type="text"
-					id="new-game-input"
-					name="new-game-input"
-					onChange={handleChange}
-					placeholder="Enter new list, press Enter to save."
-				/>
-			</form>
+		<div>
+			<Form className="align-items-center" onSubmit={handleSubmit}>
+				<Form.Group className="w-100 py-2 mx-auto rounded px-2 ">
+					<Form.Control
+						type="text"
+						id="new-list-input"
+						placeholder="Enter new list, press Enter to save."
+						onChange={handleChange}
+					/>
+				</Form.Group>
+			</Form>
 
-			<div className="row gy-3 flex-wrap p-3 m-0">
+			<Row className="gy-3 pb-3 m-0 justify-content-center">
 				{allGameLists.map((gameList) => {
 					return (
 						<GameList
@@ -56,7 +56,7 @@ export default function GameListKeeper({
 						/>
 					);
 				})}
-			</div>
+			</Row>
 		</div>
 	);
 }

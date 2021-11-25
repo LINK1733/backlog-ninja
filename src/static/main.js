@@ -6,13 +6,14 @@ import Home from './components/home';
 import GamePage from './components/gamePage';
 import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
+import './styles/main.scss';
 
 function App() {
 	const [gameList, setGameList] = useState([]);
 
 	const fetchGameLists = () => {
 		axios
-			.get('/games')
+			.get('/api/games')
 			.then((res) => setGameList(res.data))
 			.catch((err) => {
 				console.error(err);
@@ -25,7 +26,7 @@ function App() {
 
 	const deleteGameList = (gameListToDelete) => {
 		axios
-			.delete('/games/deleteGameList', {
+			.delete('/api/games/deleteGameList', {
 				data: {
 					gameListId: gameListToDelete.gameListId,
 				},
@@ -35,7 +36,7 @@ function App() {
 
 	const deleteGame = (gameToDelete) => {
 		axios
-			.delete('/games/deleteGame', {
+			.delete('/api/games/deleteGame', {
 				data: {
 					gameId: gameToDelete.game,
 					parentList: gameToDelete.parentList,
@@ -46,7 +47,7 @@ function App() {
 
 	return (
 		<Router>
-			<div>
+			<div id="mainBackground">
 				<ToastContainer
 					position="top-right"
 					autoClose={5000}

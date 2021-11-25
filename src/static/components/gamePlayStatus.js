@@ -1,4 +1,6 @@
 import React from 'react';
+import { Dropdown } from 'react-bootstrap';
+import '../styles/gamePlayStatus.scss';
 
 export default function GamePlayStatus({ playStatus, changePlayStatus }) {
 	const statuses = [
@@ -29,37 +31,33 @@ export default function GamePlayStatus({ playStatus, changePlayStatus }) {
 	)?.text;
 
 	return (
-		<div className="dropdown">
-			<button
-				className="btn btn-secondary dropdown-toggle"
+		<Dropdown>
+			<Dropdown.Toggle
+				className="btn dropdown-toggle"
 				type="button"
 				id="dropdownMenuButton1"
 				data-bs-toggle="dropdown"
 				aria-expanded="false"
 			>
 				{currentStatus}
-			</button>
-			<ul
-				className="dropdown-menu dropdown-menu-dark"
-				aria-labelledby="dropdownMenuButton1"
-			>
+			</Dropdown.Toggle>
+
+			<Dropdown.Menu variant="dark">
 				{statuses
 					.filter((status) => status.id !== playStatus)
 					.map((status) => {
 						return (
-							<li className="" key={status.id}>
-								<button
-									className="dropdown-item text-center"
-									onClick={() => {
-										changePlayStatus(status.id);
-									}}
-								>
-									{status.text}
-								</button>
-							</li>
+							<Dropdown.Item
+								key="status.id"
+								onClick={() => {
+									changePlayStatus(status.id);
+								}}
+							>
+								{status.text}
+							</Dropdown.Item>
 						);
 					})}
-			</ul>
-		</div>
+			</Dropdown.Menu>
+		</Dropdown>
 	);
 }

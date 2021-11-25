@@ -1,28 +1,34 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
-export default function GameToDoItem({ toDoItem, deleteToDoItem }) {
+export default function GameToDoItem({ parentGame, toDoItem, deleteToDoItem }) {
 	const deleteToDo = (e) => {
-		deleteToDoItem(e.currentTarget.id);
+		const toDoItemToDelete = {
+			toDoItemId: e.currentTarget.id,
+			parentGameId: parentGame,
+		};
+		deleteToDoItem(toDoItemToDelete);
 	};
 
 	return (
 		<div className="form-check border-bottom my-2 pb-2 d-flex gap-2">
-			<label
+			<span
+				id="toDoText"
 				className={`form-check-label px-2 flex-grow-1 my-auto`}
 				htmlFor={toDoItem.id}
 			>
 				{toDoItem.taskText}
-			</label>
+			</span>
 
-			<button
-				type="button"
-				className="btn btn-secondary btn-sm"
+			<Button
+				variant="secondary"
+				size="sm"
 				id={toDoItem.id}
 				onClick={deleteToDo}
 			>
 				<span className="visually-hidden">Delete To Do</span>
 				&times;
-			</button>
+			</Button>
 		</div>
 	);
 }
