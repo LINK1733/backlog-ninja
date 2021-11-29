@@ -6,5 +6,7 @@ services:
         restart: always
     postgres:
         restart: always
+        ports:
+            - 5432:5432
     redis:
         restart: always
