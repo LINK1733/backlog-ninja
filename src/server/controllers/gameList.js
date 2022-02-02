@@ -22,7 +22,7 @@ module.exports.getGameList = catchAsync(async (req, res) => {
 });
 
 module.exports.searchGame = catchAsync(async (req, res) => {
-	let searchResult = await prisma.igdbGameName.findMany({
+	const searchResult = await prisma.igdbGameName.findMany({
 		take: 10,
 		where: {
 			name: {

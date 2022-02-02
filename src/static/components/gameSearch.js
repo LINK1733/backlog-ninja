@@ -1,23 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../styles/gameSearch.scss';
 import { Form, Button } from 'react-bootstrap';
 
-export default function GameSearch({ gameList, setGameList, loading }) {
-	const [gameForm, setGameForm] = useState([]);
+export default function GameSearch({ gameList, setGameList }) {
+	const [searchFormInput, setSearchFormInput] = useState('');
 
 	const [searchResult, setSearchResult] = useState([]);
 
 	const [isSearching, setSearching] = useState(false);
 
+	const searchFormRef = useRef(null);
+
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
 			const searchInput = {
-				searchInput: gameForm,
+				searchInput: searchFormInput,
 			};
-			if (gameForm.length === 0) {
+			if (searchFormInput.length === 0) {
 				setSearchResult([]);
 			} else {
+				setSearching(true);
 				axios
 					.put('/api/games/search', searchInput)
 					.then((res) => setSearchResult(res.data))
@@ -27,7 +30,7 @@ export default function GameSearch({ gameList, setGameList, loading }) {
 		return () => {
 			clearTimeout(timeoutId);
 		};
-	}, [gameForm]);
+	}, [searchFormInput]);
 
 	const handleSubmit = (gameName) => (e) => {
 		e.preventDefault();
@@ -41,18 +44,13 @@ export default function GameSearch({ gameList, setGameList, loading }) {
 			.then(setSearchResult([]))
 			.catch((err) => console.error(err));
 
-		setGameForm('');
+		setSearchFormInput('');
 
-		document.getElementById('new-game-input').value = '';
+		searchFormRef.current.value = '';
 	};
 
 	const handleChange = (e) => {
-		setGameForm(e.currentTarget.value);
-		if (gameForm != '') {
-			setSearching(true);
-		} else {
-			setSearching(false);
-		}
+		setSearchFormInput(e.currentTarget.value);
 	};
 	return (
 		<Form onSubmit={handleSubmit} autoComplete="off">
@@ -63,12 +61,16 @@ export default function GameSearch({ gameList, setGameList, loading }) {
 				name="new-game-input"
 				onChange={handleChange}
 				placeholder="Add Game"
+				ref={searchFormRef}
 			/>
-
-			{isSearching && gameForm != '' ? (
+			{isSearching && searchFormInput != '' ? (
 				<div id="searchResults" className="rounded p-1">
 					<div className="form-check border-bottom my-1 pb-1 gap-1 justify-content-start">
 						<Button variant="link" className="searchResult">
+							<div
+								className="spinner-border spinner-border-sm"
+								role="status"
+							></div>
 							<span
 								id="searchResultName"
 								className="form-check-label flex-grow-1
@@ -81,7 +83,7 @@ export default function GameSearch({ gameList, setGameList, loading }) {
 				</div>
 			) : (
 				<>
-					{searchResult.length != 0 && gameForm != '' && (
+					{searchResult.length != 0 && searchFormInput != '' && (
 						<div id="searchResults" className="rounded p-3">
 							{searchResult.map((searchResult) => {
 								return (
@@ -121,7 +123,7 @@ export default function GameSearch({ gameList, setGameList, loading }) {
 							})}
 						</div>
 					)}
-					{searchResult.length == 0 && gameForm != '' && (
+					{searchResult.length == 0 && searchFormInput != '' && (
 						<div id="searchResults" className="rounded p-1">
 							<div className="form-check border-bottom my-1 pb-1 gap-1 justify-content-start">
 								<Button variant="link" className="searchResult">
