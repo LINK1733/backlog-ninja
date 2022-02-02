@@ -3,10 +3,12 @@ import axios from 'axios';
 import '../styles/gameSearch.scss';
 import { Form, Button } from 'react-bootstrap';
 
-export default function GameSearch({ gameList, setGameList }) {
+export default function GameSearch({ gameList, setGameList, loading }) {
 	const [gameForm, setGameForm] = useState([]);
 
 	const [searchResult, setSearchResult] = useState([]);
+
+	const [isSearching, setSearching] = useState(false);
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
@@ -15,11 +17,11 @@ export default function GameSearch({ gameList, setGameList }) {
 			};
 			if (gameForm.length === 0) {
 				setSearchResult([]);
-			}
-			if (gameForm.length) {
+			} else {
 				axios
 					.put('/api/games/search', searchInput)
-					.then((res) => setSearchResult(res.data));
+					.then((res) => setSearchResult(res.data))
+					.then(() => setSearching(false));
 			}
 		}, 500);
 		return () => {
@@ -40,56 +42,101 @@ export default function GameSearch({ gameList, setGameList }) {
 			.catch((err) => console.error(err));
 
 		setGameForm('');
+
+		document.getElementById('new-game-input').value = '';
 	};
 
 	const handleChange = (e) => {
 		setGameForm(e.currentTarget.value);
+		if (gameForm != '') {
+			setSearching(true);
+		} else {
+			setSearching(false);
+		}
 	};
 	return (
 		<Form onSubmit={handleSubmit} autoComplete="off">
 			<Form.Control
 				type="text"
 				id="new-game-input"
-				className="w-100 my-1 rounded shadow px-2 py-1"
+				className="w-100 my-1 rounded shadow px-2 py-1 form"
 				name="new-game-input"
 				onChange={handleChange}
-				placeholder="New Game"
+				placeholder="Add Game"
 			/>
-			{searchResult.length != 0 && gameForm != '' && (
-				<div id="searchResults" className="rounded p-3">
-					{searchResult.map((searchResult) => {
-						return (
-							<div
-								key={searchResult.id}
-								className="form-check border-bottom my-2 pb-2 gap-2 justify-content-start"
+
+			{isSearching && gameForm != '' ? (
+				<div id="searchResults" className="rounded p-1">
+					<div className="form-check border-bottom my-1 pb-1 gap-1 justify-content-start">
+						<Button variant="link" className="searchResult">
+							<span
+								id="searchResultName"
+								className="form-check-label flex-grow-1
+										px-2 my-auto"
 							>
-								<Button
-									variant="link"
-									className="searchResult px-2 flex-grow-1 my-auto"
-								>
-									{searchResult.cover && (
-										<img
-											src={searchResult.cover.replace(
-												'thumb',
-												'micro'
+								Searching...
+							</span>
+						</Button>
+					</div>
+				</div>
+			) : (
+				<>
+					{searchResult.length != 0 && gameForm != '' && (
+						<div id="searchResults" className="rounded p-3">
+							{searchResult.map((searchResult) => {
+								return (
+									<div
+										key={searchResult.id}
+										className="form-check border-bottom my-2 pb-2 gap-2 justify-content-start"
+									>
+										<Button
+											variant="link"
+											className="searchResult px-2 flex-grow-1 my-auto"
+										>
+											{searchResult.cover && (
+												<img
+													src={searchResult.cover.replace(
+														'thumb',
+														'micro'
+													)}
+													onClick={handleSubmit(
+														searchResult
+													)}
+													id={searchResult.id}
+												/>
 											)}
-											onClick={handleSubmit(searchResult)}
-											id={searchResult.id}
-										/>
-									)}
+											<span
+												id="searchResultName"
+												onClick={handleSubmit(
+													searchResult
+												)}
+												className="form-check-label flex-grow-1
+										px-2 my-auto"
+											>
+												{searchResult.name}
+											</span>
+										</Button>
+									</div>
+								);
+							})}
+						</div>
+					)}
+					{searchResult.length == 0 && gameForm != '' && (
+						<div id="searchResults" className="rounded p-1">
+							<div className="form-check border-bottom my-1 pb-1 gap-1 justify-content-start">
+								<Button variant="link" className="searchResult">
 									<span
 										id="searchResultName"
-										onClick={handleSubmit(searchResult)}
 										className="form-check-label flex-grow-1
 										px-2 my-auto"
 									>
-										{searchResult.name}
+										No Results
 									</span>
 								</Button>
 							</div>
-						);
-					})}
-				</div>
+						</div>
+					)}
+				</>
 			)}
 		</Form>
 	);

@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Backlog Ninja</title>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Tracker</title>
+		<script src="<%= manifest['splash.js'] %>"></script>
+	</head>
 
-    <script src="<%= manifest['splash.js'] %>"></script>
-</head>
-
-<body class="d-flex flex-column vh-100 bg-dark">
-    <main class="container mt-5">
-        <%- body %> 
-    </main>
-</body>
-
+	<body class="d-flex flex-column vh-100 bg-dark">
+		<main class="container mt-5"><%- body %></main>
+	</body>
 </html>

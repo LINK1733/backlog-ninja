@@ -7,7 +7,7 @@ export default function Header() {
 		<header>
 			<Navbar className="navBar" variant="dark" expand="lg">
 				<Container className="m-auto" fluid>
-					<Navbar.Brand href="/">Game Tracker</Navbar.Brand>
+					<Navbar.Brand href="/">Backlog Ninja</Navbar.Brand>
 					<Navbar.Toggle />
 					<Navbar.Collapse
 						id="basic-navbar-nav"
