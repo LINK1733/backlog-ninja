@@ -16,6 +16,7 @@ export default function GameListKeeper({
 		setGameListForm(e.currentTarget.value);
 	};
 
+	// For new game lists
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const newGameList = {
@@ -28,7 +29,7 @@ export default function GameListKeeper({
 
 		setGameListForm('');
 
-		e.currentTarget.value = '';
+		e.currentTarget.reset();
 	};
 
 	return (

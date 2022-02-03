@@ -16,13 +16,6 @@ export default function GameTime({ gameTimes }) {
 							key={gameTime.id}
 							className="carouselBackground"
 						>
-							{/* <img
-								src={
-									'https://howlongtobeat.com' +
-									gameTime.imageUrl
-								}
-								className="w-100 rounded"
-							/> */}
 							<Carousel.Caption>
 								<p>{gameTime.name}</p>
 								<p>

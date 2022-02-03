@@ -90,6 +90,7 @@ model igdbGameName {
   igdbGame   igdbGame @relation(fields: [igdbGameId], references: [id], onDelete: Cascade)
 
   @@unique([altNameId, igdbGameId])
+  @@index([name])
 }
 
 model igdbGameToPlayerPerspective {

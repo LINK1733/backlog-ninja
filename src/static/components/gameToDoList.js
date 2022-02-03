@@ -66,7 +66,7 @@ export default function GameToDoList({
 						id="new-toDoList-input"
 						name="new-toDoList-input"
 						onChange={handleChange}
-						placeholder="New To Do"
+						placeholder="Add To-Do"
 					/>
 				</Form>
 

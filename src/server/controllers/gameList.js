@@ -34,6 +34,7 @@ module.exports.searchGame = catchAsync(async (req, res) => {
 		select: { igdbGame: { select: { name: true, cover: true, id: true } } },
 		distinct: ['igdbGameId'],
 	});
+
 	res.json(searchResult.map((result) => result.igdbGame));
 });
 
