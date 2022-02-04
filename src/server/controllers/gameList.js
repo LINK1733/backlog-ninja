@@ -26,7 +26,7 @@ module.exports.searchGame = catchAsync(async (req, res) => {
 		take: 10,
 		where: {
 			name: {
-				search: req.body.searchInput.split(' ').join(' & '),
+				search: req.body.searchInput.replace(/[\s\n\t]/g, '_'),
 			},
 			igdbGame: { versionParent: null },
 		},
