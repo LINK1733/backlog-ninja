@@ -14,13 +14,14 @@ export default function GameSearch({ gameList, setGameList }) {
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
+			setSearching(true);
+
 			const searchInput = {
 				searchInput: searchFormInput,
 			};
 			if (searchFormInput.length === 0) {
 				setSearchResult([]);
 			} else {
-				setSearching(true);
 				axios
 					.put('/api/games/search', searchInput)
 					.then((res) => setSearchResult(res.data))
