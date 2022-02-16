@@ -3,7 +3,7 @@ WORKDIR /usr/src/app
 
 ENV NODE_ENV=development
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY prisma prisma
 RUN npx prisma generate
 CMD npm start

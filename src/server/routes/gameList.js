@@ -15,4 +15,6 @@ router.route('/deleteGameList').delete(gameList.deleteGameList);
 
 router.route('/:id/getGamePage').get(game.showGame);
 
+router.route('/reorderGames').put(game.reorderGames);
+
 module.exports = router;

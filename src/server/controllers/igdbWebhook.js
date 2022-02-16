@@ -2,9 +2,12 @@ if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config();
 }
 
+const { default: axios } = require('axios');
 const { default: igdb } = require('igdb-api-node'),
 	catchAsync = require('../utils/catchAsync'),
-	prisma = require('../db/prisma');
+	prisma = require('../db/prisma'),
+	fs = require('fs'),
+	os = require('os');
 
 const fetchItems = async (fields, requestLocation) => {
 	let continueFetch = true;
@@ -83,80 +86,89 @@ module.exports.getGames = catchAsync(async (req, res) => {
 
 		// For creating the IGDB Games
 		for (i = 0; i < games.length; i += 1) {
-			data = {
-				id: games[i].id,
-				name: games[i].name,
-				summary: games[i].summary,
-				cover:
-					games[i].cover?.url ||
-					'//images.igdb.com/igdb/image/upload/t_thumb/nocover.png',
-				versionParent: games[i].version_parent?.name || null,
-				parentGame: games[i].parent_game?.name || null,
-			};
+			// console.log(games[i]);
+			let findGame = await prisma.igdbGame.findUnique({
+				where: { id: games[i].id },
+			});
+			if (findGame == null) {
+				1;
+				data = {
+					id: games[i].id,
+					name: games[i].name,
+					summary: games[i].summary,
+					cover:
+						games[i].cover?.url ||
+						'//images.igdb.com/igdb/image/upload/t_thumb/nocover.png',
+					versionParent: games[i].version_parent?.name || null,
+					parentGame: games[i].parent_game?.name || null,
+				};
 
-			if (games[i].player_perspectives) {
-				data.playerPerspective = {
-					create: games[i].player_perspectives.map(
-						(playerPerspectiveId) => {
+				if (games[i].player_perspectives) {
+					data.playerPerspective = {
+						create: games[i].player_perspectives.map(
+							(playerPerspectiveId) => {
+								return {
+									playerPerspectiveId,
+								};
+							}
+						),
+					};
+				}
+
+				if (games[i].themes) {
+					data.theme = {
+						create: games[i].themes.map((themeId) => {
 							return {
-								playerPerspectiveId,
+								themeId,
+							};
+						}),
+					};
+				}
+
+				if (games[i].genres) {
+					data.genre = {
+						create: games[i].genres.map((genreId) => {
+							return {
+								genreId,
+							};
+						}),
+					};
+				}
+				if (games[i].alternative_names) {
+					const gameNameArray = games[i].alternative_names.map(
+						(altNameId) => {
+							return {
+								altNameId: altNameId.id,
+								name: altNameId.name,
 							};
 						}
-					),
-				};
-			}
+					);
+					gameNameArray.push({ name: games[i].name });
+					data.gameName = {
+						create: gameNameArray,
+					};
+				}
 
-			if (games[i].themes) {
-				data.theme = {
-					create: games[i].themes.map((themeId) => {
-						return {
-							themeId,
-						};
-					}),
-				};
-			}
+				if (games[i].alternative_names == undefined) {
+					data.gameName = { create: { name: games[i].name } };
+				}
 
-			if (games[i].genres) {
-				data.genre = {
-					create: games[i].genres.map((genreId) => {
-						return {
-							genreId,
-						};
-					}),
-				};
-			}
-			if (games[i].alternative_names) {
-				const gameNameArray = games[i].alternative_names.map(
-					(altNameId) => {
-						return {
-							altNameId: altNameId.id,
-							name: altNameId.name,
-						};
-					}
-				);
-				gameNameArray.push({ name: games[i].name });
-				data.gameName = {
-					create: gameNameArray,
-				};
-			}
+				if (games[i].game_modes) {
+					data.gameMode = {
+						create: games[i].game_modes.map((gameModeId) => {
+							return {
+								gameModeId,
+							};
+						}),
+					};
+				}
 
-			if (games[i].alternative_names == undefined) {
-				data.gameName = { create: { name: games[i].name } };
+				await prisma.igdbGame.create({
+					data,
+				});
 			}
-
-			if (games[i].game_modes) {
-				data.gameMode = {
-					create: games[i].game_modes.map((gameModeId) => {
-						return {
-							gameModeId,
-						};
-					}),
-				};
-			}
-			await prisma.igdbGame.create({
-				data,
-			});
 			data = [];
+
 			if (i % 1000 == 0) {
 				console.log(`Game Progress: ${i}/${games.length}`);
 			}
@@ -189,7 +201,7 @@ module.exports.createRequest = catchAsync(async (req, res) => {
 			.where(`id = ${games.cover}`)
 
 			.request('/covers');
-
+		console.log({ coverURL });
 		data.cover = coverUrl.data[0].url;
 	}
 	if (games.player_perspectives) {
@@ -274,7 +286,7 @@ module.exports.deleteRequest = catchAsync(async (req, res) => {
 		where: { id: deleteData.id },
 	});
 
-	res.send('deletion complete');
+	res.send(console.log('deletion complete'));
 });
 
 module.exports.updateRequest = catchAsync(async (req, res) => {
@@ -308,4 +320,29 @@ module.exports.updateRequest = catchAsync(async (req, res) => {
 		},
 	});
 	res.send(console.log('game update complete'));
+});
+
+module.exports.getNewToken = catchAsync(async (req, res) => {
+	const setEnvValue = (key, value) => {
+		const ENV_VARS = fs.readFileSync('./.env', 'utf8').split(os.EOL);
+		const target = ENV_VARS.indexOf(
+			ENV_VARS.find((line) => line.split('=')[0] === key)
+		);
+
+		ENV_VARS.splice(target, 1, `${key}=${value}`);
+
+		fs.writeFileSync('./.env', ENV_VARS.join(os.EOL));
+	};
+	try {
+		await axios
+			.post(
+				`https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_SECRET}&grant_type=client_credentials`
+			)
+			.then((res) =>
+				setEnvValue('TWITCH_APP_ACCESS_TOKEN', res.data.access_token)
+			)
+			.then(res.send(console.log('update complete')));
+	} catch (e) {
+		console.error(e);
+	}
 });

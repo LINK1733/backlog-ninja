@@ -1,9 +1,22 @@
 #gameName {
-	color: white;
+	color: #f0f4f8;
 }
 
 .gameButton {
 	text-decoration: none;
 	display: inline-flex;
+	background-color: #323f4b;
 	align-items: center;
+}
+
+.verticalMoveDots {
+	color: #f0f4f8;
+}
+
+#gameDiv .verticalMoveDots {
+	visibility: hidden;
+}
+
+#gameDiv:hover .verticalMoveDots {
+	visibility: visible;
 }

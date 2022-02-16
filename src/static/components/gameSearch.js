@@ -18,6 +18,7 @@ export default function GameSearch({ gameList, setGameList }) {
 
 			const searchInput = {
 				searchInput: searchFormInput,
+				gameListGames: gameList.games,
 			};
 			if (searchFormInput.length === 0) {
 				setSearchResult([]);
@@ -38,6 +39,7 @@ export default function GameSearch({ gameList, setGameList }) {
 		const newGame = {
 			gameId: gameName.id,
 			parentList: gameList.id,
+			listLength: gameList.games.length,
 		};
 		axios
 			.put('/api/games/addGame', newGame)
@@ -58,7 +60,7 @@ export default function GameSearch({ gameList, setGameList }) {
 			<Form.Control
 				type="text"
 				id="new-game-input"
-				className="w-100 my-1 rounded shadow px-2 py-1 form"
+				className="w-100 my-1 rounded  px-2 py-1 form"
 				name="new-game-input"
 				onChange={handleChange}
 				placeholder="Add Game"

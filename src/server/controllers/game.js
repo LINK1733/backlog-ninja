@@ -28,11 +28,31 @@ module.exports.getToDoList = catchAsync(async (req, res, next) => {
 
 module.exports.deleteGame = catchAsync(async (req, res, next) => {
 	try {
-		const { gameId } = req.body;
+		const { gameId, parentListId } = req.body;
+
+		const gameList = await prisma.gameList.findUnique({
+			where: { id: parentListId },
+			include: {
+				games: {
+					orderBy: {
+						listPosition: 'asc',
+					},
+				},
+			},
+		});
+
+		const gameIndex = gameList.games.findIndex((x) => x.id === gameId);
 
 		await prisma.game.delete({
 			where: { id: gameId },
 		});
+
+		for (i = gameIndex + 1; i < gameList.games.length; i++) {
+			await prisma.game.update({
+				where: { id: gameList.games[i].id },
+				data: { listPosition: gameList.games[i].listPosition - 1 },
+			});
+		}
 
 		getGameList(req, res);
 	} catch (e) {
@@ -98,5 +118,21 @@ module.exports.updatePlayStatus = catchAsync(async (req, res, next) => {
 	} catch (e) {
 		console.error(e);
 		next({ status: 400, message: 'failed to update game status' });
+	}
+});
+
+module.exports.reorderGames = catchAsync(async (req, res, next) => {
+	try {
+		const games = req.body.games;
+		for (i = 0; i < games.length; i++) {
+			await prisma.game.update({
+				where: { id: games[i].id },
+				data: { listPosition: i },
+			});
+		}
+		getGameList(req, res);
+	} catch (e) {
+		console.error(e);
+		next({ status: 400, message: 'failed to update list positions' });
 	}
 });

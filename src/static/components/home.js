@@ -6,6 +6,7 @@ export default function Home({
 	setGameList,
 	deleteGame,
 	deleteGameList,
+	reorderList,
 }) {
 	return (
 		<div className="pt-5">
@@ -14,6 +15,7 @@ export default function Home({
 				setGameList={setGameList}
 				deleteGame={deleteGame}
 				deleteGameList={deleteGameList}
+				reorderList={reorderList}
 			/>
 		</div>
 	);
