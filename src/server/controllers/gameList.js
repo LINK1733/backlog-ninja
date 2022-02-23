@@ -28,6 +28,7 @@ module.exports.searchGame = catchAsync(async (req, res) => {
 	const gameListGames = req.body.gameListGames;
 
 	let searchResults = await prisma.igdbGameName.findMany({
+		take: 30,
 		where: {
 			name: {
 				search: req.body.searchInput.replace(/[\s\n\t]/g, '_'),

@@ -6,7 +6,6 @@ import { Draggable } from 'react-beautiful-dnd';
 export default function Game({ game, deleteGame }) {
 	const deleteItem = (e) => {
 		e.preventDefault();
-		console.log(e.currentTarget);
 		const gameToDelete = {
 			game: e.currentTarget.id,
 			parentListId: game.parentListId,
