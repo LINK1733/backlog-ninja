@@ -9,6 +9,7 @@ export default function GameListKeeper({
 	setGameList,
 	deleteGame,
 	deleteGameList,
+	reorderList,
 }) {
 	const [gameListForm, setGameListForm] = useState([]);
 
@@ -34,26 +35,27 @@ export default function GameListKeeper({
 
 	return (
 		<div>
-			<Form className="align-items-center" onSubmit={handleSubmit}>
-				<Form.Group className="w-100 py-2 mx-auto rounded px-2 ">
-					<Form.Control
-						type="text"
-						id="new-list-input"
-						placeholder="Enter new list, press Enter to save."
-						onChange={handleChange}
-					/>
-				</Form.Group>
-			</Form>
-
 			<Row className="gy-3 pb-3 m-0 justify-content-center">
+				<Form className="align-items-center" onSubmit={handleSubmit}>
+					<Form.Group className="w-25 py-2 mx-auto rounded px-2 ">
+						<Form.Control
+							type="text"
+							id="new-list-input"
+							placeholder="Enter new list, press Enter to save."
+							onChange={handleChange}
+						/>
+					</Form.Group>
+				</Form>
 				{allGameLists.map((gameList) => {
 					return (
 						<GameList
+							allGameLists={allGameLists}
 							gameList={gameList}
 							setGameList={setGameList}
 							key={gameList.id}
 							deleteGame={deleteGame}
 							deleteGameList={deleteGameList}
+							reorderList={reorderList}
 						/>
 					);
 				})}

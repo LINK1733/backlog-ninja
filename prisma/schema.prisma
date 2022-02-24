@@ -35,12 +35,14 @@ model Game {
   authorId     String
   parentListId String
   igdbGameId   Int
+  listPosition Int
   playStatus   Progress   @default(PlanToPlay)
   author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   igdbGame     igdbGame   @relation(fields: [igdbGameId], references: [id], onDelete: Cascade)
   parentList   GameList   @relation(fields: [parentListId], references: [id], onDelete: Cascade)
   toDoLists    ToDoList[]
 
+  // @@unique([listPosition, parentListId])
   @@unique([igdbGameId, parentListId])
 }
 

@@ -39,10 +39,17 @@ function App() {
 			.delete('/api/games/deleteGame', {
 				data: {
 					gameId: gameToDelete.game,
-					parentList: gameToDelete.parentList,
+					parentListId: gameToDelete.parentListId,
 				},
 			})
 			.then((res) => setGameList(res.data));
+	};
+
+	const reorderList = (newList) => {
+		axios
+			.put('/api/games/reorderGames', newList)
+			.then((res) => setGameList(res.data))
+			.catch((err) => console.error(err));
 	};
 
 	return (
@@ -68,6 +75,7 @@ function App() {
 							setGameList={setGameList}
 							deleteGame={deleteGame}
 							deleteGameList={deleteGameList}
+							reorderList={reorderList}
 						/>
 					</Route>
 					<Route

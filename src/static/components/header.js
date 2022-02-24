@@ -15,15 +15,21 @@ export default function Header() {
 					>
 						<Nav>
 							<NavDropdown
-								title="Account"
 								id="account-dropdown"
 								menuVariant="dark"
 								align="end"
+								className="fa-solid fa-user d-flex align-items-center"
 							>
-								<NavDropdown.Item href="/change-password">
+								<NavDropdown.Item
+									href="/change-password"
+									className="navDropdownItem"
+								>
 									Change Password
 								</NavDropdown.Item>
-								<NavDropdown.Item href="/logout">
+								<NavDropdown.Item
+									href="/logout"
+									className="navDropdownItem"
+								>
 									Logout
 								</NavDropdown.Item>
 							</NavDropdown>
