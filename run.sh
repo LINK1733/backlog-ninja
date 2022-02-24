@@ -8,7 +8,6 @@ fi
 
 deploy_target=$1
 
-mkdir -p data
 if [[ $deploy_target == "dev" ]]; then
   docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 elif [[ $deploy_target  == "prod" ]]; then
