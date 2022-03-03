@@ -4,12 +4,7 @@ import { Carousel } from 'react-bootstrap';
 
 export default function GameTime({ gameTimes }) {
 	return (
-		<Carousel
-			interval={null}
-			indicators={false}
-			className="w-75"
-			id="hl2bCarousel"
-		>
+		<Carousel interval={null} indicators={false} className="w-75">
 			{gameTimes &&
 				gameTimes.map((gameTime) => {
 					const style = {
