@@ -3,22 +3,19 @@ import '../styles/gameTime.scss';
 import { Carousel } from 'react-bootstrap';
 
 export default function GameTime({ gameTimes }) {
+	const enableControls = !(gameTimes && gameTimes.length === 1);
 	return (
-		<Carousel interval={null} indicators={false} className="w-75">
+		<Carousel
+			interval={null}
+			indicators={false}
+			controls={enableControls}
+			className="w-75"
+		>
 			{gameTimes &&
 				gameTimes.map((gameTime) => {
 					const style = {
 						backgroundImage: `url('https://howlongtobeat.com${gameTime.imageUrl}')`,
 					};
-
-					if (gameTimes.length === 1) {
-						document.getElementsByClassName(
-							'carousel-control-next'
-						)[0].style.display = 'none';
-						document.getElementsByClassName(
-							'carousel-control-prev'
-						)[0].style.display = 'none';
-					}
 
 					return (
 						<Carousel.Item

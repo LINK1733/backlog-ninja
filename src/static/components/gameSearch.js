@@ -66,14 +66,14 @@ export default function GameSearch({ gameList, setGameList }) {
 				placeholder="Add Game"
 				ref={searchFormRef}
 			/>
-			{isSearching && searchFormInput != '' ? (
+			{isSearching && searchFormInput !== '' ? (
 				<div id="searchResults" className="rounded p-1">
 					<div className="form-check border-bottom my-1 pb-1 gap-1 justify-content-start">
 						<Button variant="link" className="searchResult">
 							<div
 								className="spinner-border spinner-border-sm"
 								role="status"
-							></div>
+							/>
 							<span
 								id="searchResultName"
 								className="form-check-label flex-grow-1
@@ -86,7 +86,7 @@ export default function GameSearch({ gameList, setGameList }) {
 				</div>
 			) : (
 				<>
-					{searchResult.length != 0 && searchFormInput != '' && (
+					{searchResult.length !== 0 && searchFormInput !== '' && (
 						<div id="searchResults" className="rounded p-3">
 							{searchResult.map((searchResult) => {
 								return (
@@ -126,7 +126,7 @@ export default function GameSearch({ gameList, setGameList }) {
 							})}
 						</div>
 					)}
-					{searchResult.length == 0 && searchFormInput != '' && (
+					{searchResult.length === 0 && searchFormInput !== '' && (
 						<div id="searchResults" className="rounded p-1">
 							<div className="form-check border-bottom my-1 pb-1 gap-1 justify-content-start">
 								<Button variant="link" className="searchResult">
