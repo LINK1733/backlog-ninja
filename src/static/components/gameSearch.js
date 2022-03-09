@@ -108,6 +108,9 @@ export default function GameSearch({ gameList, setGameList }) {
 														searchResult
 													)}
 													id={searchResult.id}
+													alt={
+														'https://images.igdb.com/igdb/image/upload/t_cover_big/nocover.png'
+													}
 												/>
 											)}
 											<span

@@ -54,7 +54,7 @@ module.exports.deleteGame = catchAsync(async (req, res, next) => {
 			});
 		}
 
-		getGameList(req, res);
+		getGameList(req, res, next);
 	} catch (e) {
 		console.error(e);
 		next({ status: 400, message: 'failed to delete game' });
@@ -130,7 +130,7 @@ module.exports.reorderGames = catchAsync(async (req, res, next) => {
 				data: { listPosition: i },
 			});
 		}
-		getGameList(req, res);
+		getGameList(req, res, next);
 	} catch (e) {
 		console.error(e);
 		next({ status: 400, message: 'failed to update list positions' });

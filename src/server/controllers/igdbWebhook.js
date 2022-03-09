@@ -14,7 +14,7 @@ const fetchItems = async (fields, requestLocation) => {
 	let offset = 0;
 	let itemsToCreate = [];
 
-	while (continueFetch == true) {
+	while (continueFetch === true) {
 		const fetchedData = await igdb(
 			process.env.TWITCH_CLIENT_ID,
 			process.env.TWITCH_APP_ACCESS_TOKEN
@@ -25,18 +25,18 @@ const fetchItems = async (fields, requestLocation) => {
 			.offset(offset)
 
 			.request(requestLocation);
-		if (fetchedData.data.length != 0) {
+		if (fetchedData.data.length !== 0) {
 			itemsToCreate = itemsToCreate.concat(fetchedData.data);
 		}
 		offset += 500;
-		if (fetchedData.data.length == 0) {
+		if (fetchedData.data.length === 0) {
 			return itemsToCreate;
 		}
 	}
 };
 
 const createItems = async (itemsToCreate, table) => {
-	for (i = 0; i < itemsToCreate.length; i += 1) {
+	for (let i = 0; i < itemsToCreate.length; i += 1) {
 		await prisma[table].upsert({
 			where: {
 				id: itemsToCreate[i].id,
@@ -50,7 +50,7 @@ const createItems = async (itemsToCreate, table) => {
 	}
 };
 
-module.exports.getGames = catchAsync(async (req, res) => {
+module.exports.getGames = catchAsync(async () => {
 	let games = [],
 		data = [];
 
@@ -85,13 +85,11 @@ module.exports.getGames = catchAsync(async (req, res) => {
 		console.log('Fetched games. Moving onto creating games.');
 
 		// For creating the IGDB Games
-		for (i = 0; i < games.length; i += 1) {
-			// console.log(games[i]);
+		for (let i = 0; i < games.length; i += 1) {
 			let findGame = await prisma.igdbGame.findUnique({
 				where: { id: games[i].id },
 			});
 			if (findGame == null) {
-				1;
 				data = {
 					id: games[i].id,
 					name: games[i].name,
@@ -149,7 +147,7 @@ module.exports.getGames = catchAsync(async (req, res) => {
 					};
 				}
 
-				if (games[i].alternative_names == undefined) {
+				if (games[i].alternative_names === undefined) {
 					data.gameName = { create: { name: games[i].name } };
 				}
 
@@ -169,7 +167,7 @@ module.exports.getGames = catchAsync(async (req, res) => {
 			}
 			data = [];
 
-			if (i % 1000 == 0) {
+			if (i % 1000 === 0) {
 				console.log(`Game Progress: ${i}/${games.length}`);
 			}
 		}
@@ -184,7 +182,7 @@ module.exports.getGames = catchAsync(async (req, res) => {
 
 module.exports.createRequest = catchAsync(async (req, res) => {
 	const games = req.body;
-	data = {
+	let data = {
 		id: games.id,
 		name: games.name,
 		summary: games.summary,
@@ -201,7 +199,6 @@ module.exports.createRequest = catchAsync(async (req, res) => {
 			.where(`id = ${games.cover}`)
 
 			.request('/covers');
-		console.log({ coverURL });
 		data.cover = coverUrl.data[0].url;
 	}
 	if (games.player_perspectives) {
@@ -259,7 +256,7 @@ module.exports.createRequest = catchAsync(async (req, res) => {
 		};
 	}
 
-	if (games.alternative_names == undefined) {
+	if (games.alternative_names === undefined) {
 		data.gameName = { create: { name: games.name } };
 	}
 

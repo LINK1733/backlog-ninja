@@ -19,6 +19,7 @@ export default function Header() {
 								menuVariant="dark"
 								align="end"
 								className="fa-solid fa-user d-flex align-items-center"
+								title=""
 							>
 								<NavDropdown.Item
 									href="/change-password"

@@ -98,7 +98,7 @@ module.exports.addGameItem = catchAsync(async (req, res, next) => {
 			},
 		});
 
-		module.exports.getGameList(req, res);
+		module.exports.getGameList(req, res, next);
 	} catch (e) {
 		console.error(e);
 		next({ status: 400, message: 'failed to create game' });
@@ -111,7 +111,7 @@ module.exports.deleteGameList = catchAsync(async (req, res, next) => {
 			where: { id: req.body.gameListId },
 		});
 
-		module.exports.getGameList(req, res);
+		module.exports.getGameList(req, res, next);
 	} catch (e) {
 		console.error(e);
 		next({ status: 400, message: 'failed to delete game list' });
@@ -131,7 +131,7 @@ module.exports.newGameList = catchAsync(async (req, res, next) => {
 			},
 		});
 
-		module.exports.getGameList(req, res);
+		module.exports.getGameList(req, res, next);
 	} catch (e) {
 		console.error(e);
 		next({ status: 400, message: 'failed to create game list' });

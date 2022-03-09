@@ -15,7 +15,6 @@ export default function GameToDoItem({ parentGame, toDoItem, deleteToDoItem }) {
 			<span
 				id="toDoText"
 				className={`form-check-label px-2 flex-grow-1 my-auto`}
-				htmlFor={toDoItem.id}
 			>
 				{toDoItem.taskText}
 			</span>
