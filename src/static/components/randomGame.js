@@ -1,6 +1,5 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import { Button } from 'react-bootstrap';
 import '../styles/randomGame.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import { Dropdown } from 'react-bootstrap';
@@ -12,7 +11,7 @@ export default function RandomGame(games) {
 		if (length > 1) {
 			const randomNum = Math.floor(Math.random() * length);
 			toast(`Play ${listGames[randomNum].igdbGame.name}`);
-		} else if (length == 1) {
+		} else if (length === 1) {
 			toast.warn('You need to add at least one more game to this list!');
 		} else {
 			toast.warn('Add a couple games to your list first!');

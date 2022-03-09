@@ -19,7 +19,7 @@ module.exports.newToDoList = catchAsync(async (req, res, next) => {
 				},
 			},
 		});
-		getToDoList(req, res);
+		getToDoList(req, res, next);
 	} catch (e) {
 		console.error(e);
 		next({ status: 400, message: 'failed to create to do list' });
@@ -32,7 +32,7 @@ module.exports.deleteToDoList = catchAsync(async (req, res, next) => {
 			where: { id: req.body.toDoListId },
 		});
 
-		getToDoList(req, res);
+		getToDoList(req, res, next);
 	} catch (e) {
 		console.error(e);
 		next({ status: 400, message: 'failed to delete to do list' });
@@ -56,7 +56,7 @@ module.exports.newToDoItem = catchAsync(async (req, res, next) => {
 				},
 			},
 		});
-		getToDoList(req, res);
+		getToDoList(req, res, next);
 	} catch (e) {
 		console.error(e);
 		next({ status: 400, message: 'failed to create to do item' });
@@ -71,7 +71,7 @@ module.exports.deleteToDoItem = catchAsync(async (req, res, next) => {
 			where: { id: toDoItemId },
 		});
 
-		getToDoList(req, res);
+		getToDoList(req, res, next);
 	} catch (e) {
 		console.error(e);
 		next({ status: 400, message: 'failed to delete game' });

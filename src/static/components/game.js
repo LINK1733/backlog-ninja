@@ -42,6 +42,9 @@ export default function Game({ game, deleteGame }) {
 							className="float-start rounded"
 							src={thumbnail}
 							id={game.id}
+							alt={
+								'https://images.igdb.com/igdb/image/upload/t_micro/nocover.png'
+							}
 						/>
 						<span
 							id="gameName"
