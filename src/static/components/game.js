@@ -26,7 +26,7 @@ export default function Game({ game, deleteGame }) {
 		>
 			{(provided) => (
 				<div
-					className="border-bottom border-secondary my-2 pb-2 d-flex align-items-center"
+					className="border-bottom border-secondary my-1 pb-1 d-flex align-items-center justify-content-between"
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
 					ref={provided.innerRef}

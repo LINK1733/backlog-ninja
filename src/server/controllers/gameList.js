@@ -27,18 +27,22 @@ module.exports.getGameList = catchAsync(async (req, res) => {
 module.exports.searchGame = catchAsync(async (req, res) => {
 	const gameListGames = req.body.gameListGames;
 
+	let searchInput = req.body.searchInput.replace(/[^0-9a-zA-Z]+/g, '_');
+
+	searchInput = searchInput.replace(/^_|_$/g, '');
+
 	let searchResults = await prisma.igdbGameName.findMany({
 		take: 30,
 		where: {
 			name: {
-				search: req.body.searchInput.replace(/[\s\n\t]/g, '_'),
+				search: searchInput,
 			},
 			igdbGame: { versionParent: null },
 		},
 		orderBy: {
 			_relevance: {
 				fields: ['name'],
-				search: req.body.searchInput.replace(/[\s\n\t]/g, '_'),
+				search: searchInput,
 				sort: 'asc',
 			},
 		},
@@ -49,7 +53,7 @@ module.exports.searchGame = catchAsync(async (req, res) => {
 
 	const gamesToRemove = [];
 
-	for (i = 0; i < gameListGames.length; i++) {
+	for (let i = 0; i < gameListGames.length; i++) {
 		const gameIndex = searchResults.findIndex(
 			(x) => x.igdbGame.id === gameListGames[i].igdbGame.id
 		);
@@ -63,7 +67,7 @@ module.exports.searchGame = catchAsync(async (req, res) => {
 
 	const newSearchResults = Array.from(searchResults);
 
-	for (i = gamesToRemove.length - 1; i >= 0; i--) {
+	for (let i = gamesToRemove.length - 1; i >= 0; i--) {
 		newSearchResults.splice(gamesToRemove[i], 1);
 	}
 

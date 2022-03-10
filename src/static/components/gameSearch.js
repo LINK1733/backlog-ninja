@@ -87,12 +87,12 @@ export default function GameSearch({ gameList, setGameList }) {
 			) : (
 				<>
 					{searchResult.length !== 0 && searchFormInput !== '' && (
-						<div id="searchResults" className="rounded p-3">
+						<div id="searchResults" className="rounded px-3">
 							{searchResult.map((searchResult) => {
 								return (
 									<div
 										key={searchResult.id}
-										className="form-check border-bottom my-2 pb-2 gap-2 justify-content-start"
+										className="form-check border-bottom my-1 pb-1"
 									>
 										<Button
 											variant="link"

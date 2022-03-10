@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import GameToDoItem from './gameToDoItem';
 import '../styles/gameToDoList.scss';
-import { Col, Button, Form } from 'react-bootstrap';
+import { Col, Button, Form, Dropdown, Row } from 'react-bootstrap';
+import RandomGame from './randomGame';
 
 export default function GameToDoList({
 	gameToDoList,
@@ -47,17 +48,34 @@ export default function GameToDoList({
 
 	return (
 		<Col xs={12} sm={6} md={3} className="rounded gamePageToDoList">
-			<div className="p-3">
-				<h2 className="text-center">{toDoListName}</h2>
-				<Button
-					variant="secondary"
-					size="sm"
-					id={gameToDoList.id}
-					onClick={deleteToDoList}
-				>
-					<span className="visually-hidden">Delete List</span>
-					&times;
-				</Button>
+			<div className="py-1">
+				<Row className="listHeader">
+					<Col>
+						<h2 className="text-center">{toDoListName}</h2>
+					</Col>
+					<Col xs="auto">
+						<Dropdown className="pt-2">
+							<Dropdown.Toggle className="fas fa-bars dropdownButton" />
+							<Dropdown.Menu
+								variant="dark"
+								className="listDropdown"
+							>
+								<div>
+									<Dropdown.Item
+										id={gameToDoList.id}
+										onClick={deleteToDoList}
+									>
+										Delete List
+										<span className="visually-hidden">
+											Delete List
+										</span>
+									</Dropdown.Item>
+								</div>
+							</Dropdown.Menu>
+						</Dropdown>
+					</Col>
+				</Row>
+
 				<Form onSubmit={handleSubmit}>
 					<Form.Control
 						value={gameToDoItemForm}
