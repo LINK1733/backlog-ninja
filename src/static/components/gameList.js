@@ -67,7 +67,7 @@ export default function GameList({
 	return (
 		<DragDropContext onDragEnd={onDragEnd}>
 			<Col xs={12} sm={6} md={3} className="rounded gameList">
-				<div className="p-1 justify-content-center">
+				<div className="py-1">
 					<Row className="listHeader">
 						<Col>
 							<h2 className="listTitle">{listName}</h2>

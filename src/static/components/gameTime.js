@@ -3,7 +3,11 @@ import '../styles/gameTime.scss';
 import { Carousel } from 'react-bootstrap';
 
 export default function GameTime({ gameTimes }) {
-	const enableControls = !(gameTimes && gameTimes.length === 1);
+	let enableControls = !(gameTimes && gameTimes.length <= 1);
+
+	if (!gameTimes) {
+		enableControls = false;
+	}
 	return (
 		<Carousel
 			interval={null}

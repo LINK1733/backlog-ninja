@@ -47,7 +47,7 @@ module.exports.deleteGame = catchAsync(async (req, res, next) => {
 			where: { id: gameId },
 		});
 
-		for (i = gameIndex + 1; i < gameList.games.length; i++) {
+		for (let i = gameIndex + 1; i < gameList.games.length; i++) {
 			await prisma.game.updateMany({
 				where: { id: gameList.games[i].id, authorId: req.user.id },
 				data: { listPosition: gameList.games[i].listPosition - 1 },
@@ -124,7 +124,7 @@ module.exports.updatePlayStatus = catchAsync(async (req, res, next) => {
 module.exports.reorderGames = catchAsync(async (req, res, next) => {
 	try {
 		const games = req.body.games;
-		for (i = 0; i < games.length; i++) {
+		for (let i = 0; i < games.length; i++) {
 			await prisma.game.updateMany({
 				where: { id: games[i].id, authorId: req.user.id },
 				data: { listPosition: i },

@@ -11,7 +11,7 @@ export default function GameToDoItem({ parentGame, toDoItem, deleteToDoItem }) {
 	};
 
 	return (
-		<div className="form-check border-bottom my-2 pb-2 d-flex gap-2">
+		<div className="form-check border-bottom border-secondary pb-1 d-flex justify-content-between">
 			<span
 				id="toDoText"
 				className={`form-check-label px-2 flex-grow-1 my-auto`}
