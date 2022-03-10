@@ -76,7 +76,7 @@ module.exports.updatePassword = async (req, res) => {
 				(await bcrypt.compare(oldPassword, currentUser.hash));
 
 		if (passwordCorrect) {
-			let newHash = await hashPassword(newPassword);
+			const newHash = await hashPassword(newPassword);
 			await prisma.user.update({
 				where: {
 					id: req.user.id,
