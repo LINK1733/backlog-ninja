@@ -54,6 +54,7 @@ module.exports.newToDoItem = catchAsync(async (req, res, next) => {
 						id: req.body.parentToDoList,
 					},
 				},
+				listPosition: req.body.listLength,
 			},
 		});
 		getToDoList(req, res, next);
@@ -65,15 +66,69 @@ module.exports.newToDoItem = catchAsync(async (req, res, next) => {
 
 module.exports.deleteToDoItem = catchAsync(async (req, res, next) => {
 	try {
-		const { toDoItemId } = req.body;
+		const { toDoItemId, parentListId } = req.body;
+
+		const toDoList = await prisma.toDoList.findUnique({
+			where: { id: parentListId },
+			include: {
+				toDoItems: {
+					orderBy: {
+						listPosition: 'asc',
+					},
+				},
+			},
+		});
+
+		const toDoIndex = toDoList.toDoItems.findIndex(
+			(x) => x.id === toDoItemId
+		);
 
 		await prisma.toDoItem.delete({
 			where: { id: toDoItemId },
 		});
 
+		for (let i = toDoIndex + 1; i < toDoList.toDoItems.length; i++) {
+			await prisma.toDoItem.updateMany({
+				where: { id: toDoList.toDoItems[i].id, authorId: req.user.id },
+				data: { listPosition: toDoList.toDoItems[i].listPosition - 1 },
+			});
+		}
+
 		getToDoList(req, res, next);
 	} catch (e) {
 		console.error(e);
 		next({ status: 400, message: 'failed to delete game' });
+	}
+});
+
+module.exports.updateToDoItem = catchAsync(async (req, res, next) => {
+	try {
+		const { editedToDo, toDoItemId } = req.body;
+
+		await prisma.toDoItem.update({
+			where: { id: toDoItemId },
+			data: { taskText: editedToDo },
+		});
+
+		getToDoList(req, res, next);
+	} catch (e) {
+		console.error(e);
+		next({ status: 400, message: 'failed to update toDoText' });
+	}
+});
+
+module.exports.reorderToDoItems = catchAsync(async (req, res, next) => {
+	try {
+		const toDoItems = req.body.toDoItems;
+		for (let i = 0; i < toDoItems.length; i++) {
+			await prisma.toDoItem.updateMany({
+				where: { id: toDoItems[i].id, authorId: req.user.id },
+				data: { listPosition: i },
+			});
+		}
+		getToDoList(req, res, next);
+	} catch (e) {
+		console.error(e);
+		next({ status: 400, message: 'failed to update list positions' });
 	}
 });

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/game.scss';
 import { Button } from 'react-bootstrap';
 import { Draggable } from 'react-beautiful-dnd';
 
 export default function Game({ game, deleteGame }) {
+	const [dotStyle, setDotStyle] = useState();
+
 	const deleteItem = (e) => {
 		e.preventDefault();
 		const gameToDelete = {
@@ -17,6 +19,17 @@ export default function Game({ game, deleteGame }) {
 		thumbnail = game.igdbGame.cover.replace('thumb', 'micro');
 	}
 
+	const showDots = () => {
+		setDotStyle({ visibility: 'visible' });
+		document.body.addEventListener(
+			'mouseup',
+			() => {
+				setDotStyle({});
+			},
+			{ once: true }
+		);
+	};
+
 	return (
 		<Draggable
 			draggableId={game.id}
@@ -28,11 +41,15 @@ export default function Game({ game, deleteGame }) {
 				<div
 					className="border-bottom border-secondary my-1 pb-1 d-flex align-items-center justify-content-between"
 					{...provided.draggableProps}
-					{...provided.dragHandleProps}
 					ref={provided.innerRef}
 					id="gameDiv"
+					onMouseDown={showDots}
 				>
-					<i className="fa-solid fa-grip-vertical verticalMoveDots" />
+					<i
+						className="fa-solid fa-grip-vertical verticalMoveDots"
+						{...provided.dragHandleProps}
+						style={dotStyle}
+					/>
 
 					<Button
 						variant="link"

@@ -12,8 +12,11 @@ router
 router
 	.route('/toDoItem')
 	.put(gameToDo.newToDoItem)
-	.delete(gameToDo.deleteToDoItem);
+	.delete(gameToDo.deleteToDoItem)
+	.patch(gameToDo.updateToDoItem);
 
 router.route('/updatePlayStatus').put(game.updatePlayStatus);
+
+router.route('/reorderToDoItems').put(gameToDo.reorderToDoItems);
 
 module.exports = router;

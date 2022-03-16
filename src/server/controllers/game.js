@@ -15,7 +15,11 @@ module.exports.getToDoList = catchAsync(async (req, res, next) => {
 					: req.body.parentGameId,
 			},
 			include: {
-				toDoItems: true,
+				toDoItems: {
+					orderBy: {
+						listPosition: 'asc',
+					},
+				},
 			},
 		});
 

@@ -13,7 +13,7 @@ export default function GameList({
 	setGameList,
 	deleteGame,
 	deleteGameList,
-	reorderList,
+	reorderGameList,
 }) {
 	const listName = gameList.listName;
 
@@ -52,16 +52,16 @@ export default function GameList({
 			gameList.games[movedItemIndex]
 		);
 
-		const reorderedList = {
+		const reorderedGameList = {
 			...gameList,
 			games: newListOrder,
 		};
 
 		const newAllGamesList = [...allGameLists];
-		newAllGamesList[listIndex] = reorderedList;
+		newAllGamesList[listIndex] = reorderedGameList;
 		setGameList(newAllGamesList);
 
-		reorderList(reorderedList);
+		reorderGameList(reorderedGameList);
 	};
 
 	return (

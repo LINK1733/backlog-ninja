@@ -1,3 +1,19 @@
 #toDoText {
-	white-space: break-spaces;
+  white-space: break-spaces;
+}
+
+[contenteditable]:focus {
+  outline: none;
+}
+
+#toDoDiv {
+  background-color: #323f4b;
+}
+
+#toDoDiv .verticalMoveDots {
+  visibility: hidden;
+}
+
+#toDoDiv:hover .verticalMoveDots {
+  visibility: visible;
 }

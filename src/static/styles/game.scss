@@ -5,12 +5,15 @@
 .gameButton {
 	text-decoration: none;
 	display: inline-flex;
-	background-color: #323f4b;
 	align-items: center;
 }
 
 .verticalMoveDots {
 	color: #f0f4f8;
+}
+
+#gameDiv {
+  background-color: #323f4b;
 }
 
 #gameDiv .verticalMoveDots {

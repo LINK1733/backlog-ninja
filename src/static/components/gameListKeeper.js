@@ -9,7 +9,7 @@ export default function GameListKeeper({
 	setGameList,
 	deleteGame,
 	deleteGameList,
-	reorderList,
+	reorderGameList,
 }) {
 	const [gameListForm, setGameListForm] = useState([]);
 
@@ -20,6 +20,7 @@ export default function GameListKeeper({
 	// For new game lists
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
 		const newGameList = {
 			listName: gameListForm,
 		};
@@ -55,7 +56,7 @@ export default function GameListKeeper({
 							key={gameList.id}
 							deleteGame={deleteGame}
 							deleteGameList={deleteGameList}
-							reorderList={reorderList}
+							reorderGameList={reorderGameList}
 						/>
 					);
 				})}

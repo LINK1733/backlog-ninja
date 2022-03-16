@@ -35,14 +35,13 @@ model Game {
   authorId     String
   parentListId String
   igdbGameId   Int
-  listPosition Int
   playStatus   Progress   @default(PlanToPlay)
+  listPosition Int
   author       User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   igdbGame     igdbGame   @relation(fields: [igdbGameId], references: [id], onDelete: Cascade)
   parentList   GameList   @relation(fields: [parentListId], references: [id], onDelete: Cascade)
   toDoLists    ToDoList[]
 
-  // @@unique([listPosition, parentListId])
   @@unique([igdbGameId, parentListId])
 }
 
@@ -63,6 +62,7 @@ model ToDoItem {
   parentToDoListId String
   authorId         String
   taskText         String
+  listPosition     Int
   author           User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   parentToDoList   ToDoList @relation(fields: [parentToDoListId], references: [id], onDelete: Cascade)
 }
@@ -92,7 +92,6 @@ model igdbGameName {
   igdbGame   igdbGame @relation(fields: [igdbGameId], references: [id], onDelete: Cascade)
 
   @@unique([altNameId, igdbGameId])
-  @@index([name])
 }
 
 model igdbGameToPlayerPerspective {
