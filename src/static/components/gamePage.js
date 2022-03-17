@@ -6,7 +6,7 @@ import '../styles/gamePage.scss';
 import GameTime from './gameTime';
 import { Col, Container, Image, Row, Form } from 'react-bootstrap';
 
-export default function GamePage({ game }) {
+export default function GamePage({ gameId }) {
 	const [gameToDoLists, setGameToDoLists] = useState([]);
 
 	const [gamePageInfo, setGamePageInfo] = useState([]);
@@ -33,7 +33,7 @@ export default function GamePage({ game }) {
 		e.preventDefault();
 		const newGameToDoList = {
 			toDoListName: gameToDoListForm,
-			parentGameId: game,
+			parentGameId: gameId,
 		};
 		axios
 			.put('/api/gameToDoLists/', newGameToDoList)
@@ -41,6 +41,13 @@ export default function GamePage({ game }) {
 			.catch((err) => console.error(err));
 
 		setGameToDoListForm('');
+	};
+
+	const reorderToDoList = (newList) => {
+		axios
+			.put('/api/gameToDoLists/reorderToDoItems', newList)
+			.then((res) => setGameToDoLists(res.data))
+			.catch((err) => console.error(err));
 	};
 
 	let cover = '';
@@ -55,7 +62,7 @@ export default function GamePage({ game }) {
 	const fetchGameToDoLists = () => {
 		axios
 			.get('/api/gameToDoLists', {
-				params: { parentGameId: game },
+				params: { parentGameId: gameId },
 			})
 			.then((res) => setGameToDoLists(res.data))
 			.catch((err) => {
@@ -65,7 +72,7 @@ export default function GamePage({ game }) {
 
 	const fetchGamePage = async () => {
 		await axios
-			.get(`/api/games/${game}/getGamePage`)
+			.get(`/api/games/${gameId}/getGamePage`)
 			.then((res) => setGamePageInfo(res.data))
 			.catch((err) => {
 				console.error(err);
@@ -93,6 +100,7 @@ export default function GamePage({ game }) {
 			.delete('/api/gameToDoLists/toDoItem', {
 				data: {
 					toDoItemId: toDoItemToDelete.toDoItemId,
+					parentListId: toDoItemToDelete.parentListId,
 					parentGameId: toDoItemToDelete.parentGameId,
 				},
 			})
@@ -212,12 +220,14 @@ export default function GamePage({ game }) {
 				{gameToDoLists.map((gameToDoList) => {
 					return (
 						<GameToDoList
+							allToDoLists={gameToDoLists}
 							gameToDoList={gameToDoList}
 							setGameToDoLists={setGameToDoLists}
 							key={gameToDoList.id}
 							deleteToDoItem={deleteToDoItem}
 							deleteGameToDoList={deleteGameToDoList}
-							parentGame={game}
+							parentGameId={gameId}
+							reorderToDoList={reorderToDoList}
 						/>
 					);
 				})}

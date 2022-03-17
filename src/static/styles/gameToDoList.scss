@@ -16,8 +16,10 @@
 	color: #f0f4f8;
 	border-color: transparent;
 	outline: none;
-	&:focus {
-		outline: none;
-		border: 1px solid #cc5500;
-	}
+    box-shadow: 0 0 0;
+
+    &:focus {
+          outline: none;
+          border: 1px solid #cc5500;
+      }
 }

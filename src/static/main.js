@@ -45,7 +45,7 @@ function App() {
 			.then((res) => setGameList(res.data));
 	};
 
-	const reorderList = (newList) => {
+	const reorderGameList = (newList) => {
 		axios
 			.put('/api/games/reorderGames', newList)
 			.then((res) => setGameList(res.data))
@@ -75,13 +75,13 @@ function App() {
 							setGameList={setGameList}
 							deleteGame={deleteGame}
 							deleteGameList={deleteGameList}
-							reorderList={reorderList}
+							reorderGameList={reorderGameList}
 						/>
 					</Route>
 					<Route
 						path="/games/:id"
 						render={({ match }) => (
-							<GamePage game={match.params.id} />
+							<GamePage gameId={match.params.id} />
 						)}
 					/>
 				</Switch>
