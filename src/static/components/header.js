@@ -1,5 +1,7 @@
 import React from 'react';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
 import '../styles/header.scss';
 
 export default function Header() {
@@ -7,7 +9,9 @@ export default function Header() {
 		<header>
 			<Navbar className="navBar" variant="dark" expand="lg">
 				<Container className="m-auto" fluid>
-					<Navbar.Brand href="/">Backlog Ninja</Navbar.Brand>
+					<Link to={'/'} id="navBar-home">
+						<Navbar.Brand>Backlog Ninja</Navbar.Brand>
+					</Link>
 					<Navbar.Toggle />
 					<Navbar.Collapse
 						id="basic-navbar-nav"
