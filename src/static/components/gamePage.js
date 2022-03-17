@@ -43,13 +43,6 @@ export default function GamePage({ gameId }) {
 		setGameToDoListForm('');
 	};
 
-	const reorderToDoList = (newList) => {
-		axios
-			.put('/api/gameToDoLists/reorderToDoItems', newList)
-			.then((res) => setGameToDoLists(res.data))
-			.catch((err) => console.error(err));
-	};
-
 	let cover = '';
 
 	let igdbGame = [],
@@ -227,7 +220,6 @@ export default function GamePage({ gameId }) {
 							deleteToDoItem={deleteToDoItem}
 							deleteGameToDoList={deleteGameToDoList}
 							parentGameId={gameId}
-							reorderToDoList={reorderToDoList}
 						/>
 					);
 				})}

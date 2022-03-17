@@ -6,18 +6,18 @@ import RandomGame from './randomGame';
 import '../styles/gameList.scss';
 import { Row, Col, Dropdown } from 'react-bootstrap';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
+import { alphabetSort, reorderList } from '../sort';
 
 export default function GameList({
 	allGameLists,
-	gameList,
+	currentGameList,
 	setGameList,
 	deleteGame,
 	deleteGameList,
-	reorderGameList,
 }) {
-	const listName = gameList.listName;
+	const listName = currentGameList.listName;
 
-	const games = gameList.games;
+	const games = currentGameList.games;
 
 	const deleteList = (e) => {
 		const gameListToDelete = {
@@ -27,41 +27,24 @@ export default function GameList({
 	};
 
 	const onDragEnd = (result) => {
-		const { destination, source, draggableId } = result;
-
-		const listIndex = allGameLists.findIndex((x) => x.id === gameList.id);
-
-		const movedItemIndex = gameList.games.findIndex(
-			(x) => x.id === draggableId
-		);
-
-		if (!destination) {
-			return;
-		}
-		if (
-			destination.droppableId === source.droppableId &&
-			destination.index === source.index
-		) {
-			return;
-		}
-		const newListOrder = Array.from(gameList.games);
-		newListOrder.splice(source.index, 1);
-		newListOrder.splice(
-			destination.index,
-			0,
-			gameList.games[movedItemIndex]
-		);
-
-		const reorderedGameList = {
-			...gameList,
-			games: newListOrder,
+		const reorderProps = {
+			route: '/api/games/reorderGames',
+			currentList: currentGameList,
+			result: result,
+			allLists: allGameLists,
+			listItems: currentGameList.games,
+			reorderSource: 'games',
 		};
+		reorderList(reorderProps, setGameList);
+	};
 
-		const newAllGamesList = [...allGameLists];
-		newAllGamesList[listIndex] = reorderedGameList;
-		setGameList(newAllGamesList);
-
-		reorderGameList(reorderedGameList);
+	const sortList = () => {
+		const sortProps = {
+			route: '/api/games/reorderGames',
+			currentList: currentGameList,
+			reorderSource: 'games',
+		};
+		alphabetSort(sortProps, setGameList);
 	};
 
 	return (
@@ -81,7 +64,7 @@ export default function GameList({
 								>
 									<div>
 										<Dropdown.Item
-											id={gameList.id}
+											id={currentGameList.id}
 											onClick={deleteList}
 										>
 											Delete List
@@ -92,15 +75,30 @@ export default function GameList({
 									</div>
 									<Dropdown.Divider />
 									<RandomGame games={games} />
+									<Dropdown.Divider />
+									<div>
+										<Dropdown.Item
+											id={`sort-${currentGameList.id}`}
+											onClick={sortList}
+										>
+											Sort A-Z
+											<span className="visually-hidden">
+												Sort A-Z
+											</span>
+										</Dropdown.Item>
+									</div>
 								</Dropdown.Menu>
 							</Dropdown>
 						</Col>
 					</Row>
 
-					<GameSearch gameList={gameList} setGameList={setGameList} />
+					<GameSearch
+						gameList={currentGameList}
+						setGameList={setGameList}
+					/>
 					<Droppable
-						droppableId={gameList.id}
-						key={`droppable-${gameList.id}`}
+						droppableId={currentGameList.id}
+						key={`droppable-${currentGameList.id}`}
 					>
 						{(provided) => (
 							<div

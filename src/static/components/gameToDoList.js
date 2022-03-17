@@ -4,6 +4,7 @@ import GameToDoItem from './gameToDoItem';
 import '../styles/gameToDoList.scss';
 import { Col, Form, Dropdown, Row } from 'react-bootstrap';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
+import { reorderList } from '../sort';
 
 export default function GameToDoList({
 	allToDoLists,
@@ -12,7 +13,6 @@ export default function GameToDoList({
 	deleteToDoItem,
 	deleteGameToDoList,
 	parentGameId,
-	reorderToDoList,
 }) {
 	const [gameToDoItemForm, setGameToDoItemForm] = useState([]);
 
@@ -50,43 +50,16 @@ export default function GameToDoList({
 	};
 
 	const onDragEnd = (result) => {
-		const { destination, source, draggableId } = result;
-
-		const listIndex = allToDoLists.findIndex(
-			(x) => x.id === gameToDoList.id
-		);
-
-		const movedItemIndex = gameToDoList.toDoItems.findIndex(
-			(x) => x.id === draggableId
-		);
-
-		if (!destination) {
-			return;
-		}
-		if (
-			destination.droppableId === source.droppableId &&
-			destination.index === source.index
-		) {
-			return;
-		}
-		const newListOrder = Array.from(gameToDoList.toDoItems);
-		newListOrder.splice(source.index, 1);
-		newListOrder.splice(
-			destination.index,
-			0,
-			gameToDoList.toDoItems[movedItemIndex]
-		);
-
-		const reorderedToDoList = {
-			...gameToDoList,
-			toDoItems: newListOrder,
+		const reorderProps = {
+			route: '/api/gameToDoLists/reorderToDoItems',
+			currentList: gameToDoList,
+			result: result,
+			allLists: allToDoLists,
+			listItems: gameToDoList.toDoItems,
+			reorderSource: 'toDoItems',
 		};
 
-		const newAllGameToDoList = [...allToDoLists];
-		newAllGameToDoList[listIndex] = reorderedToDoList;
-		setGameToDoLists(newAllGameToDoList);
-
-		reorderToDoList(reorderedToDoList);
+		reorderList(reorderProps, setGameToDoLists);
 	};
 
 	return (
