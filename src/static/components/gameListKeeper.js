@@ -1,17 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import GameList from './gameList';
 import '../styles/gameListKeeper.scss';
 import { Form, Row } from 'react-bootstrap';
 
-export default function GameListKeeper({
-	allGameLists,
-	setGameList,
-	deleteGame,
-	deleteGameList,
-	reorderGameList,
-}) {
+export default function GameListKeeper() {
 	const [gameListForm, setGameListForm] = useState([]);
+
+	const [allGameLists, setGameList] = useState([]);
+
+	const fetchGameLists = () => {
+		axios
+			.get('/api/games')
+			.then((res) => setGameList(res.data))
+			.catch((err) => {
+				console.error(err);
+			});
+	};
+
+	useEffect(() => {
+		fetchGameLists(setGameList);
+	}, []);
+
+	const deleteGameList = (gameListToDelete) => {
+		axios
+			.delete('/api/games/deleteGameList', {
+				data: {
+					gameListId: gameListToDelete.gameListId,
+				},
+			})
+			.then((res) => setGameList(res.data));
+	};
+
+	const deleteGame = (gameToDelete) => {
+		axios
+			.delete('/api/games/deleteGame', {
+				data: {
+					gameId: gameToDelete.game,
+					parentListId: gameToDelete.parentListId,
+				},
+			})
+			.then((res) => setGameList(res.data));
+	};
 
 	const handleChange = (e) => {
 		setGameListForm(e.currentTarget.value);
@@ -51,12 +81,11 @@ export default function GameListKeeper({
 					return (
 						<GameList
 							allGameLists={allGameLists}
-							gameList={gameList}
+							currentGameList={gameList}
 							setGameList={setGameList}
 							key={gameList.id}
 							deleteGame={deleteGame}
 							deleteGameList={deleteGameList}
-							reorderGameList={reorderGameList}
 						/>
 					);
 				})}
