@@ -29,6 +29,8 @@
 		"copy-webpack-plugin": "^10.2.4",
 		"css-loader": "^5.2.6",
 		"cuid": "^2.1.8",
+		"dotenv": "^16.0.0",
+		"dotenv-expand": "^8.0.3",
 		"dotenv-webpack": "^7.1.0",
 		"ejs-mate": "^3.0.0",
 		"express": "^4.17.1",

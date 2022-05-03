@@ -1,3 +1,7 @@
+const dotenvExpand = require('dotenv-expand'),
+	dotenv = require('dotenv');
+dotenvExpand(dotenv.config());
+
 const express = require('express'),
 	path = require('path'),
 	ejsMate = require('ejs-mate'),
