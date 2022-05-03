@@ -4,12 +4,14 @@ const catchAsync = require('../utils/catchAsync'),
 
 module.exports.newToDoList = catchAsync(async (req, res, next) => {
 	try {
+		userId = req.session.user.sub;
+		userId = userId.slice(userId.indexOf('|') + 1);
 		await prisma.toDoList.create({
 			data: {
 				toDoListName: req.body.toDoListName,
 				author: {
 					connect: {
-						id: req.user.id,
+						id: userId,
 					},
 				},
 				parentGame: {
@@ -41,12 +43,14 @@ module.exports.deleteToDoList = catchAsync(async (req, res, next) => {
 
 module.exports.newToDoItem = catchAsync(async (req, res, next) => {
 	try {
+		userId = req.session.user.sub;
+		userId = userId.slice(userId.indexOf('|') + 1);
 		await prisma.toDoItem.create({
 			data: {
 				taskText: req.body.toDoItemText,
 				author: {
 					connect: {
-						id: req.user.id,
+						id: userId,
 					},
 				},
 				parentToDoList: {
@@ -66,6 +70,8 @@ module.exports.newToDoItem = catchAsync(async (req, res, next) => {
 
 module.exports.deleteToDoItem = catchAsync(async (req, res, next) => {
 	try {
+		userId = req.session.user.sub;
+		userId = userId.slice(userId.indexOf('|') + 1);
 		const { toDoItemId, parentListId } = req.body;
 
 		const toDoList = await prisma.toDoList.findUnique({
@@ -89,7 +95,7 @@ module.exports.deleteToDoItem = catchAsync(async (req, res, next) => {
 
 		for (let i = toDoIndex + 1; i < toDoList.toDoItems.length; i++) {
 			await prisma.toDoItem.updateMany({
-				where: { id: toDoList.toDoItems[i].id, authorId: req.user.id },
+				where: { id: toDoList.toDoItems[i].id, authorId: userId },
 				data: { listPosition: toDoList.toDoItems[i].listPosition - 1 },
 			});
 		}
@@ -119,10 +125,12 @@ module.exports.updateToDoItem = catchAsync(async (req, res, next) => {
 
 module.exports.reorderToDoItems = catchAsync(async (req, res, next) => {
 	try {
-		const toDoItems = req.body.toDoItems;
+		userId = req.session.user.sub;
+		userId = userId.slice(userId.indexOf('|') + 1);
+		const { toDoItems } = req.body.reorderedList;
 		for (let i = 0; i < toDoItems.length; i++) {
 			await prisma.toDoItem.updateMany({
-				where: { id: toDoItems[i].id, authorId: req.user.id },
+				where: { id: toDoItems[i].id, authorId: userId },
 				data: { listPosition: i },
 			});
 		}

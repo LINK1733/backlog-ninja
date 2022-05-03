@@ -1,7 +1,3 @@
-if (process.env.NODE_ENV !== 'production') {
-	require('dotenv').config();
-}
-
 const { default: axios } = require('axios');
 const { default: igdb } = require('igdb-api-node'),
 	catchAsync = require('../utils/catchAsync'),

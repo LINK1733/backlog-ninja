@@ -20,7 +20,7 @@ export default function GamePage({ gameId }) {
 	const changePlayStatus = (playStatus) => {
 		const newPlayStatus = {
 			newPlayStatus: playStatus,
-			game: game,
+			game: gameId,
 		};
 
 		axios
