@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catchAsync'),
 
 module.exports.newToDoList = catchAsync(async (req, res, next) => {
 	try {
-		userId = req.session.user.sub;
+		let userId = req.session.user.sub;
 		userId = userId.slice(userId.indexOf('|') + 1);
 		await prisma.toDoList.create({
 			data: {
@@ -43,7 +43,7 @@ module.exports.deleteToDoList = catchAsync(async (req, res, next) => {
 
 module.exports.newToDoItem = catchAsync(async (req, res, next) => {
 	try {
-		userId = req.session.user.sub;
+		let userId = req.session.user.sub;
 		userId = userId.slice(userId.indexOf('|') + 1);
 		await prisma.toDoItem.create({
 			data: {
@@ -70,7 +70,7 @@ module.exports.newToDoItem = catchAsync(async (req, res, next) => {
 
 module.exports.deleteToDoItem = catchAsync(async (req, res, next) => {
 	try {
-		userId = req.session.user.sub;
+		let userId = req.session.user.sub;
 		userId = userId.slice(userId.indexOf('|') + 1);
 		const { toDoItemId, parentListId } = req.body;
 
@@ -125,7 +125,7 @@ module.exports.updateToDoItem = catchAsync(async (req, res, next) => {
 
 module.exports.reorderToDoItems = catchAsync(async (req, res, next) => {
 	try {
-		userId = req.session.user.sub;
+		let userId = req.session.user.sub;
 		userId = userId.slice(userId.indexOf('|') + 1);
 		const { toDoItems } = req.body.reorderedList;
 		for (let i = 0; i < toDoItems.length; i++) {

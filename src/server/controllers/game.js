@@ -7,7 +7,7 @@ let hltbService = new hltb.HowLongToBeatService();
 
 module.exports.getToDoList = catchAsync(async (req, res, next) => {
 	try {
-		userId = req.session.user.sub;
+		let userId = req.session.user.sub;
 		userId = userId.slice(userId.indexOf('|') + 1);
 		const toDoLists = await prisma.toDoList.findMany({
 			where: {
@@ -34,7 +34,7 @@ module.exports.getToDoList = catchAsync(async (req, res, next) => {
 
 module.exports.deleteGame = catchAsync(async (req, res, next) => {
 	try {
-		userId = req.session.user.sub;
+		let userId = req.session.user.sub;
 		userId = userId.slice(userId.indexOf('|') + 1);
 		const { gameId, parentListId } = req.body;
 
@@ -102,7 +102,6 @@ module.exports.showGame = catchAsync(async (req, res, next) => {
 
 module.exports.updatePlayStatus = catchAsync(async (req, res, next) => {
 	try {
-		console.log('hello from updatePlayStatus');
 		const game = await prisma.game.update({
 			where: { id: req.body.game },
 			data: {
@@ -135,7 +134,7 @@ module.exports.updatePlayStatus = catchAsync(async (req, res, next) => {
 
 module.exports.reorderGames = catchAsync(async (req, res, next) => {
 	try {
-		userId = req.session.user.sub;
+		let userId = req.session.user.sub;
 		userId = userId.slice(userId.indexOf('|') + 1);
 		const { games } = req.body.reorderedList;
 		for (let i = 0; i < games.length; i++) {
