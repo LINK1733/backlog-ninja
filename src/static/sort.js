@@ -28,12 +28,16 @@ export const reorderList = (reorderProps, setListState) => {
 		...currentList,
 		[reorderSource]: newListOrder,
 	};
+	const data = {
+		reorderedList: reorderedList,
+		parentGameId: reorderedList.parentGameId,
+	};
 
 	const newAllList = [...allLists];
 	newAllList[listIndex] = reorderedList;
 	setListState(newAllList);
 
-	setNewList(reorderedList, route, setListState);
+	setNewList(data, route, setListState);
 };
 
 export const setNewList = (newList, route, setListState) => {
@@ -55,5 +59,9 @@ export const alphabetSort = (sortProps, setListState) => {
 		[reorderSource]: listItems,
 	};
 
-	setNewList(reorderedList, route, setListState);
+	const data = {
+		reorderedList: reorderedList,
+	};
+
+	setNewList(data, route, setListState);
 };

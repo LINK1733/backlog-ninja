@@ -1,12 +1,7 @@
-const dotenvExpand = require('dotenv-expand'),
-	dotenv = require('dotenv');
-dotenvExpand(dotenv.config());
-
 const express = require('express'),
 	path = require('path'),
 	ejsMate = require('ejs-mate'),
 	expressSession = require('express-session'),
-	passport = require('passport'),
 	flash = require('connect-flash'),
 	catchAsync = require('./utils/catchAsync'),
 	getManifest = require('./utils/getManifest'),
@@ -51,11 +46,7 @@ app.use(
 
 app.use(flash());
 
-app.use(passport.initialize());
-app.use(passport.session());
-
 app.use((req, res, next) => {
-	res.locals.currentUser = req.user;
 	res.locals.success = req.flash('success');
 	res.locals.error = req.flash('error');
 	next();
@@ -70,9 +61,9 @@ app.get(
 	'/',
 	catchAsync(async (req, res) => {
 		const manifest = await getManifest();
-		if (req.user) {
+		if (req.session.user) {
 			res.render('home', {
-				user: serialize(req.user),
+				user: serialize(req.session.user),
 				manifest,
 			});
 		} else {
@@ -85,9 +76,10 @@ app.get(
 	'/games/*',
 	catchAsync(async (req, res) => {
 		const manifest = await getManifest();
-		if (req.user) {
+
+		if (req.session.user) {
 			res.render('home', {
-				user: serialize(req.user),
+				user: serialize(req.session.user),
 				manifest,
 			});
 		} else {

@@ -7,9 +7,11 @@ let hltbService = new hltb.HowLongToBeatService();
 
 module.exports.getToDoList = catchAsync(async (req, res, next) => {
 	try {
+		userId = req.session.user.sub;
+		userId = userId.slice(userId.indexOf('|') + 1);
 		const toDoLists = await prisma.toDoList.findMany({
 			where: {
-				authorId: req.user.id,
+				authorId: userId,
 				parentGameId: req.query.parentGameId
 					? req.query.parentGameId
 					: req.body.parentGameId,
@@ -32,6 +34,8 @@ module.exports.getToDoList = catchAsync(async (req, res, next) => {
 
 module.exports.deleteGame = catchAsync(async (req, res, next) => {
 	try {
+		userId = req.session.user.sub;
+		userId = userId.slice(userId.indexOf('|') + 1);
 		const { gameId, parentListId } = req.body;
 
 		const gameList = await prisma.gameList.findUnique({
@@ -53,7 +57,10 @@ module.exports.deleteGame = catchAsync(async (req, res, next) => {
 
 		for (let i = gameIndex + 1; i < gameList.games.length; i++) {
 			await prisma.game.updateMany({
-				where: { id: gameList.games[i].id, authorId: req.user.id },
+				where: {
+					id: gameList.games[i].id,
+					authorId: userId,
+				},
 				data: { listPosition: gameList.games[i].listPosition - 1 },
 			});
 		}
@@ -95,6 +102,7 @@ module.exports.showGame = catchAsync(async (req, res, next) => {
 
 module.exports.updatePlayStatus = catchAsync(async (req, res, next) => {
 	try {
+		console.log('hello from updatePlayStatus');
 		const game = await prisma.game.update({
 			where: { id: req.body.game },
 			data: {
@@ -127,10 +135,12 @@ module.exports.updatePlayStatus = catchAsync(async (req, res, next) => {
 
 module.exports.reorderGames = catchAsync(async (req, res, next) => {
 	try {
-		const games = req.body.games;
+		userId = req.session.user.sub;
+		userId = userId.slice(userId.indexOf('|') + 1);
+		const { games } = req.body.reorderedList;
 		for (let i = 0; i < games.length; i++) {
 			await prisma.game.updateMany({
-				where: { id: games[i].id, authorId: req.user.id },
+				where: { id: games[i].id, authorId: userId },
 				data: { listPosition: i },
 			});
 		}

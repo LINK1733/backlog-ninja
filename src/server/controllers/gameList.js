@@ -1,14 +1,10 @@
-if (process.env.NODE_ENV !== 'production') {
-	require('dotenv').config();
-}
-
 const catchAsync = require('../utils/catchAsync'),
 	prisma = require('../db/prisma');
 
 module.exports.getGameList = catchAsync(async (req, res) => {
 	const gameLists = await prisma.gameList.findMany({
 		where: {
-			authorId: req.user.id,
+			authorId: req.headers.userid ? req.headers.userid : req.body.userId,
 		},
 		include: {
 			games: {
@@ -80,11 +76,13 @@ module.exports.searchGame = catchAsync(async (req, res) => {
 
 module.exports.addGameItem = catchAsync(async (req, res, next) => {
 	try {
+		userId = req.session.user.sub;
+		userId = userId.slice(userId.indexOf('|') + 1);
 		await prisma.game.create({
 			data: {
 				author: {
 					connect: {
-						id: req.user.id,
+						id: userId,
 					},
 				},
 				parentList: {
@@ -124,6 +122,9 @@ module.exports.deleteGameList = catchAsync(async (req, res, next) => {
 
 module.exports.newGameList = catchAsync(async (req, res, next) => {
 	try {
+		userId = req.session.user.sub;
+		userId = userId.slice(userId.indexOf('|') + 1);
+
 		await prisma.user.update({
 			data: {
 				lists: {
@@ -131,7 +132,7 @@ module.exports.newGameList = catchAsync(async (req, res, next) => {
 				},
 			},
 			where: {
-				id: req.user.id,
+				id: userId,
 			},
 		});
 

@@ -12,10 +12,12 @@
 	"author": "Alex Kitzberger & Jake Harrington",
 	"license": "ISC",
 	"dependencies": {
+		"@auth0/auth0-react": "^1.9.0",
 		"@babel/core": "^7.14.6",
 		"@babel/preset-react": "^7.14.5",
 		"@popperjs/core": "^2.9.2",
 		"@prisma/client": "^3.9.1",
+		"auth0": "^2.40.0",
 		"autoprefixer": "^10.2.6",
 		"axios": "^0.25.0",
 		"babel-cli": "^6.26.0",
@@ -24,12 +26,13 @@
 		"bootstrap": "^5.1.1",
 		"connect-flash": "^0.1.1",
 		"connect-redis": "^6.0.0",
+		"copy-webpack-plugin": "^10.2.4",
 		"css-loader": "^5.2.6",
 		"cuid": "^2.1.8",
-		"dotenv": "^10.0.0",
-		"dotenv-expand": "^5.1.0",
+		"dotenv-webpack": "^7.1.0",
 		"ejs-mate": "^3.0.0",
 		"express": "^4.17.1",
+		"express-oauth2-jwt-bearer": "^1.1.0",
 		"express-session": "^1.17.2",
 		"howlongtobeat": "^1.5.0",
 		"igdb-api-node": "^5.0.1",
@@ -48,7 +51,7 @@
 		"serialize-javascript": "^6.0.0",
 		"style-loader": "^2.0.0",
 		"webpack": "^5.40.0",
-		"webpack-cli": "^4.7.2"
+		"webpack-cli": "^4.9.2"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.7",
