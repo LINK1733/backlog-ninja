@@ -4,7 +4,6 @@ dotenvExpand.expand(dotenv.config());
 
 const express = require('express'),
 	path = require('path'),
-	ejsMate = require('ejs-mate'),
 	expressSession = require('express-session'),
 	flash = require('connect-flash'),
 	catchAsync = require('./utils/catchAsync'),
@@ -27,7 +26,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('./public'));
 app.use(express.json());
 
-app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
