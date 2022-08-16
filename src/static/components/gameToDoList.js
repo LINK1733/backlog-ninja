@@ -5,6 +5,7 @@ import '../styles/gameToDoList.scss';
 import { Col, Form, Dropdown, Row } from 'react-bootstrap';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { reorderList } from '../sort';
+import DeleteListModal from './deleteListModal';
 
 export default function GameToDoList({
 	allToDoLists,
@@ -15,6 +16,11 @@ export default function GameToDoList({
 	parentGameId,
 }) {
 	const [gameToDoItemForm, setGameToDoItemForm] = useState([]);
+
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
 
 	const toDoListName = gameToDoList.toDoListName;
 
@@ -42,7 +48,7 @@ export default function GameToDoList({
 
 	const deleteToDoList = (e) => {
 		const toDoListToDelete = {
-			toDoListId: e.currentTarget.id,
+			toDoListId: gameToDoList.id,
 			parentGameId: parentGameId,
 		};
 
@@ -80,7 +86,7 @@ export default function GameToDoList({
 									<div>
 										<Dropdown.Item
 											id={gameToDoList.id}
-											onClick={deleteToDoList}
+											onClick={handleShow}
 										>
 											Delete List
 											<span className="visually-hidden">
@@ -133,6 +139,12 @@ export default function GameToDoList({
 					</Droppable>
 				</div>
 			</Col>
+
+			<DeleteListModal
+				show={show}
+				handleClose={handleClose}
+				deleteList={deleteToDoList}
+			/>
 		</DragDropContext>
 	);
 }

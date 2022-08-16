@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Game from './game';
 import GameSearch from './gameSearch';
@@ -7,6 +7,7 @@ import '../styles/gameList.scss';
 import { Row, Col, Dropdown } from 'react-bootstrap';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { alphabetSort, reorderList } from '../sort';
+import DeleteListModal from './deleteListModal';
 
 export default function GameList({
 	allGameLists,
@@ -17,11 +18,17 @@ export default function GameList({
 }) {
 	const listName = currentGameList.listName;
 
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
 	const games = currentGameList.games;
 
-	const deleteList = (e) => {
+	const deleteList = () => {
+		setShow(false);
 		const gameListToDelete = {
-			gameListId: e.currentTarget.id,
+			gameListId: currentGameList.id,
 		};
 		deleteGameList(gameListToDelete);
 	};
@@ -65,7 +72,7 @@ export default function GameList({
 									<div>
 										<Dropdown.Item
 											id={currentGameList.id}
-											onClick={deleteList}
+											onClick={handleShow}
 										>
 											Delete List
 											<span className="visually-hidden">
@@ -126,6 +133,11 @@ export default function GameList({
 					</Droppable>
 				</div>
 			</Col>
+			<DeleteListModal
+				show={show}
+				handleClose={handleClose}
+				deleteList={deleteList}
+			/>
 		</DragDropContext>
 	);
 }
