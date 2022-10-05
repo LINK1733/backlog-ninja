@@ -2,6 +2,7 @@ const catchAsync = require('../utils/catchAsync'),
 	{ getGameList } = require('./gameList'),
 	hltb = require('howlongtobeat'),
 	prisma = require('../db/prisma');
+const axios = require('axios');
 
 let hltbService = new hltb.HowLongToBeatService();
 
@@ -90,9 +91,50 @@ module.exports.showGame = catchAsync(async (req, res, next) => {
 			},
 		});
 
-		const hltbTime = await hltbService.search(game.igdbGame.name);
+		// const data = {
+		// 	searchType: 'games',
+		// 	searchTerms: ['monkey', 'island'],
+		// 	searchPage: 1,
+		// 	size: 20,
+		// 	searchOptions: {
+		// 		games: {
+		// 			userId: 0,
+		// 			platform: '',
+		// 			sortCategory: 'popular',
+		// 			rangeCategory: 'main',
+		// 			rangeTime: {
+		// 				min: 0,
+		// 				max: 0,
+		// 			},
+		// 			gameplay: {
+		// 				perspective: '',
+		// 				flow: '',
+		// 				genre: '',
+		// 			},
+		// 			modifier: '',
+		// 		},
+		// 		users: {
+		// 			sortCategory: 'postcount',
+		// 		},
+		// 		filter: '',
+		// 		sort: 0,
+		// 		randomizer: 0,
+		// 	},
+		// };
+		// let hltbTime;
+		// await axios
+		// 	.post('https://www.howlongtobeat.com/api/search', data, {
+		// 		headers: { Referer: 'https://howlongtobeat.com/' },
+		// 	})
+		// 	.then((res) => {
+		// 		hltbTime = res.filter((data) => data.similarity > 0.85);
+		// 	});
+		//
+		// console.log(hltbTime);
+		// const hltbTime = await hltbService.search(game.igdbGame.name);
+		//
+		// game.hltbTime = hltbTime.filter((results) => results.similarity > 0.85);
 
-		game.hltbTime = hltbTime.filter((results) => results.similarity > 0.85);
 		res.json(game);
 	} catch (e) {
 		console.error(e);
@@ -120,10 +162,10 @@ module.exports.updatePlayStatus = catchAsync(async (req, res, next) => {
 				},
 			},
 		});
-
-		const hltbTime = await hltbService.search(game.igdbGame.name);
-
-		game.hltbTime = hltbTime.filter((results) => results.similarity > 0.85);
+		//
+		// const hltbTime = await hltbService.search(game.igdbGame.name);
+		//
+		// game.hltbTime = hltbTime.filter((results) => results.similarity > 0.85);
 
 		res.json(game);
 	} catch (e) {

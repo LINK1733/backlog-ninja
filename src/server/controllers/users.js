@@ -14,7 +14,7 @@ module.exports.login = (req, res) => {
 		if (userInfo) {
 			let userId = userInfo.sub;
 			userId = userId.slice(userId.indexOf('|') + 1);
-			console.log(userInfo);
+
 			await prisma.user.upsert({
 				where: { id: userId },
 				update: { id: userId },

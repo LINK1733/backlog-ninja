@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDom from 'react-dom';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import ReactDom from 'react-dom/client';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/header';
 import Home from './components/home';
 import GamePage from './components/gamePage';
@@ -30,20 +30,14 @@ function App() {
 						theme="dark"
 					/>
 					<Header />
-					<Switch>
-						<Route exact path="/">
-							<Home />
-						</Route>
-						<Route
-							path="/games/:id"
-							render={({ match }) => (
-								<GamePage gameId={match.params.id} />
-							)}
-						/>
-					</Switch>
+					<Routes>
+						<Route exact path="/" element={<Home />}></Route>
+						<Route path="/games/:id" element={<GamePage />} />
+					</Routes>
 				</div>
 			</Router>
 		</Auth0Provider>
 	);
 }
-ReactDom.render(<App />, document.querySelector('#app-root'));
+const root = ReactDom.createRoot(document.querySelector('#app-root'));
+root.render(<App />);

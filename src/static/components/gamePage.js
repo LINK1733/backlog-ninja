@@ -5,8 +5,11 @@ import GamePlayStatus from './gamePlayStatus';
 import '../styles/gamePage.scss';
 import GameTime from './gameTime';
 import { Col, Container, Image, Row, Form } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 
-export default function GamePage({ gameId }) {
+export default function GamePage() {
+	let gameId = useParams().id;
+
 	const [gameToDoLists, setGameToDoLists] = useState([]);
 
 	const [gamePageInfo, setGamePageInfo] = useState([]);
