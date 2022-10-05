@@ -4,7 +4,7 @@ import Game from './game';
 import GameSearch from './gameSearch';
 import RandomGame from './randomGame';
 import '../styles/gameList.scss';
-import { Row, Col, Dropdown } from 'react-bootstrap';
+import { Row, Col, Dropdown, Button } from 'react-bootstrap';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
 import { alphabetSort, reorderList } from '../sort';
 import DeleteListModal from './deleteListModal';
@@ -18,12 +18,16 @@ export default function GameList({
 }) {
 	const listName = currentGameList.listName;
 
+	const [expanded, setExpanded] = useState(false);
+
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
-	const games = currentGameList.games;
+	const games = expanded
+		? currentGameList.games
+		: currentGameList.games.slice(0, 8);
 
 	const deleteList = () => {
 		setShow(false);
@@ -109,6 +113,8 @@ export default function GameList({
 					>
 						{(provided) => (
 							<div
+								id={'listDiv'}
+								className={'d-grid'}
 								ref={provided.innerRef}
 								{...provided.droppableProps}
 							>
@@ -127,6 +133,16 @@ export default function GameList({
 										</Link>
 									);
 								})}
+								{currentGameList.games.length > 8 && (
+									<Button
+										variant={'link'}
+										id={'expandButton'}
+										className="flex-grow-1 my-auto"
+										onClick={() => setExpanded(!expanded)}
+									>
+										{expanded ? 'Show Less' : 'Show More'}
+									</Button>
+								)}
 								{provided.placeholder}
 							</div>
 						)}
