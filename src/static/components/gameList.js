@@ -6,8 +6,9 @@ import RandomGame from './randomGame';
 import '../styles/gameList.scss';
 import { Row, Col, Dropdown, Button } from 'react-bootstrap';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
-import { alphabetSort, reorderList } from '../sort';
+import { alphabetSort, alphabetCompletedSort, reorderList } from '../sort';
 import DeleteListModal from './deleteListModal';
+import { filterList } from '../filter';
 
 export default function GameList({
 	allGameLists,
@@ -25,10 +26,6 @@ export default function GameList({
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
-	const games = expanded
-		? currentGameList.games
-		: currentGameList.games.slice(0, 8);
-
 	const deleteList = () => {
 		setShow(false);
 		const gameListToDelete = {
@@ -36,6 +33,15 @@ export default function GameList({
 		};
 		deleteGameList(gameListToDelete);
 	};
+
+	let { gamesWithoutFilter, gamesWithFilter } = filterList(
+		currentGameList,
+		'Completed'
+	);
+
+	const games = expanded
+		? currentGameList.games
+		: currentGameList.games.slice(0, 8);
 
 	const onDragEnd = (result) => {
 		const reorderProps = {
@@ -56,6 +62,16 @@ export default function GameList({
 			reorderSource: 'games',
 		};
 		alphabetSort(sortProps, setGameList);
+	};
+	const sortListCompletedAtBottom = () => {
+		const sortProps = {
+			route: '/api/games/reorderGames',
+			currentList: currentGameList,
+			completedGames: gamesWithFilter,
+			incompleteGames: gamesWithoutFilter,
+			reorderSource: 'games',
+		};
+		alphabetCompletedSort(sortProps, setGameList);
 	};
 
 	return (
@@ -85,9 +101,20 @@ export default function GameList({
 										</Dropdown.Item>
 									</div>
 									<Dropdown.Divider />
-									<RandomGame games={games} />
+									<RandomGame games={gamesWithoutFilter} />
 									<Dropdown.Divider />
 									<div>
+										<Dropdown.Item
+											id={`sortCompleted-${currentGameList.id}`}
+											onClick={sortListCompletedAtBottom}
+										>
+											Sort Incomplete Games A-Z
+											<span className="visually-hidden">
+												Sort Incomplete Games A-Z
+											</span>
+										</Dropdown.Item>
+										<Dropdown.Divider />
+
 										<Dropdown.Item
 											id={`sort-${currentGameList.id}`}
 											onClick={sortList}
@@ -123,7 +150,11 @@ export default function GameList({
 										<Link
 											to={`/games/${game.id}`}
 											key={game.id}
-											className="flex-grow-1 gameLink"
+											className={`flex-grow-1 gameLink ${
+												game.playStatus === 'Completed'
+													? 'completedGame'
+													: 'incompleteGame'
+											}`}
 										>
 											<Game
 												game={game}

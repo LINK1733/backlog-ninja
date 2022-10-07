@@ -65,3 +65,31 @@ export const alphabetSort = (sortProps, setListState) => {
 
 	setNewList(data, route, setListState);
 };
+
+export const alphabetCompletedSort = (sortProps, setListState) => {
+	const {
+		route,
+		currentList,
+		completedGames,
+		incompleteGames,
+		reorderSource,
+	} = sortProps;
+	const listItems = [...incompleteGames];
+	listItems.sort((a, b) => (a.igdbGame.name > b.igdbGame.name ? 1 : -1));
+	listItems.forEach((game, i) => (listItems[i].listPosition = i));
+
+	const completedItems = [...completedGames];
+	completedItems.sort((a, b) => (a.igdbGame.name > b.igdbGame.name ? 1 : -1));
+	completedItems.forEach((game, i) => (completedItems[i].listPosition = i));
+
+	const reorderedList = {
+		...currentList,
+		[reorderSource]: listItems.concat(completedItems),
+	};
+
+	const data = {
+		reorderedList: reorderedList,
+	};
+
+	setNewList(data, route, setListState);
+};
